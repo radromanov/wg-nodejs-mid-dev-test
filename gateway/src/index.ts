@@ -1,12 +1,8 @@
 import express from "express";
+import { Application } from "./core";
 
-import { Config } from "./lib";
+const expr = express();
+const app = new Application(expr);
 
-const config = new Config();
-const { port, env } = config.get();
-
-const app = express();
-
-app.listen(port, () =>
-  console.log(`Slot Game API Gateway running on port ${port} in ${env} mode.`)
-);
+app.endpoints();
+app.listen();
