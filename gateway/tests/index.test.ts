@@ -13,6 +13,8 @@ app.post("/sim", (_req, res) =>
   res.json({ totalWinnings: 500, netResult: 250 })
 );
 
+app.get("/rtp", (_req, res) => res.json({ rtp: 95 }));
+
 describe("API Gateway", () => {
   it("should play a slot game", async () => {
     const res = await request(app).post("/play").send({ bet: 100 });
@@ -27,5 +29,12 @@ describe("API Gateway", () => {
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("totalWinnings");
     expect(res.body).toHaveProperty("netResult");
+  });
+
+  it("should return Return-to-Player (RTP)", async () => {
+    const res = await request(app).get("/rtp");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("rtp");
   });
 });
