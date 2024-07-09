@@ -10,8 +10,8 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development nodemon",
-    "test": "jest",
-    "test:w": "jest --watch"
+    "test": "NODE_ENV=testing jest",
+    "test:w": "NODE_ENV=testing jest --watch"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

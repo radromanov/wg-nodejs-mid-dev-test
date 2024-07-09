@@ -1,5 +1,5 @@
 import { Express, json, urlencoded } from "express";
-import { Config } from "../lib";
+import { PlayModule } from "../api";
 
 export class Application {
   constructor(private readonly app: Express) {}
@@ -11,18 +11,18 @@ export class Application {
 
   endpoints() {
     this.setup();
+    const playModule = new PlayModule().init();
+
+    this.app.use("/api/game", playModule);
 
     return this.app;
   }
 
   listen(portNum?: number) {
-    const config = new Config();
-    const { port, env } = config.get();
-
-    portNum = portNum || port;
+    portNum = portNum || 3000;
 
     return this.app.listen(portNum, () =>
-      console.log(`Game Service running on port ${portNum} in ${env} mode`)
+      console.log(`Game Service running on port ${portNum}`)
     );
   }
 }

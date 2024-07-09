@@ -1,8 +1,11 @@
 import express from "express";
 import { Application } from "./core";
+import { Config } from "./lib";
 
-const expr = express();
-const app = new Application(expr);
+const config = new Config();
+const port = config.get("port");
 
-app.endpoints();
-app.listen();
+export const expr = express();
+export const app = new Application(expr);
+export const endpoints = app.endpoints();
+export const server = app.listen(port);

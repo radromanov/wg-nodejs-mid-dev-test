@@ -41,6 +41,7 @@ export class Config {
       if (key) return fromEnv[key];
       else return fromEnv;
     } catch (error) {
+      console.log(error);
       throw new Error(
         "Internal Server Error - could not initialize Game Service."
       );

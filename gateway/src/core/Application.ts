@@ -1,5 +1,4 @@
 import { Express, json, urlencoded } from "express";
-import { Config } from "../lib";
 import axios from "axios";
 
 export class Application {
@@ -24,14 +23,9 @@ export class Application {
     return this.app;
   }
 
-  listen(portNum?: number) {
-    const config = new Config();
-    const { port, env } = config.get();
-
-    portNum = portNum || port;
-
+  listen(portNum = 3000) {
     return this.app.listen(portNum, () =>
-      console.log(`API Gateway running on port ${portNum} in ${env} mode`)
+      console.log(`API Gateway running on port ${portNum}`)
     );
   }
 }
