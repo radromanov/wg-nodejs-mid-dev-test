@@ -11,7 +11,7 @@ export class PlayModule {
 
   get router() {
     this._router.post(
-      "/play",
+      "/",
       validate(PlayInput),
       catcher(this.controller.handlePlay)
     );

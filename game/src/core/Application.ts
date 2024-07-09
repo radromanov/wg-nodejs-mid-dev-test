@@ -1,5 +1,12 @@
 import { Express, json, urlencoded } from "express";
-import { PlayController, PlayModule, PlayService } from "../api";
+import {
+  PlayController,
+  PlayModule,
+  PlayService,
+  SimController,
+  SimModule,
+  SimService,
+} from "../api";
 import { globalError } from "../lib";
 
 export class Application {
@@ -16,7 +23,13 @@ export class Application {
     const playController = new PlayController(playService);
     const playModule = new PlayModule(playController);
 
-    this.app.use("/api/game", playModule.router);
+    const simService = new SimService(playService);
+    const simController = new SimController(simService);
+    const simModule = new SimModule(simController);
+
+    this.app.use("/play", playModule.router);
+    this.app.use("/sim", simModule.router);
+
     this.app.use(globalError);
 
     return this.app;

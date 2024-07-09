@@ -2,7 +2,12 @@ import "./dotenv";
 
 import { z } from "zod";
 import { minimum, required } from "./zod";
-import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "./constants";
+import {
+  GAME_SERVICE_HOST_MIN_LENGTH,
+  GAME_SERVICE_PORT_MIN_LENGTH,
+  HOST_MIN_LENGTH,
+  PORT_MIN_LENGTH,
+} from "./constants";
 import { AppError } from "../core";
 
 export class Config {
@@ -24,6 +29,25 @@ export class Config {
       ["development", "production", "testing", "staging"],
       required("process.env.NODE_ENV")
     ),
+    gameServiceHost: z
+      .string(required("process.env.GAME_SERVICE_HOST"))
+      .min(
+        GAME_SERVICE_HOST_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_HOST", GAME_SERVICE_HOST_MIN_LENGTH)
+      ),
+    gameServicePort: z
+      .string(required("process.env.GAME_SERVICE_PORT"))
+      .min(
+        GAME_SERVICE_PORT_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_PORT", GAME_SERVICE_PORT_MIN_LENGTH)
+      )
+      .transform((val) => parseInt(val, 10)),
+    gameServiceUrl: z
+      .string(required("process.env.GAME_SERVICE_URL"))
+      .min(
+        GAME_SERVICE_HOST_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_URL", GAME_SERVICE_HOST_MIN_LENGTH)
+      ),
   });
 
   get(key?: never): ReturnType<typeof this.schema.parse>;
@@ -37,6 +61,9 @@ export class Config {
         host: process.env.GATEWAY_HOST,
         port: process.env.GATEWAY_PORT,
         env: process.env.NODE_ENV,
+        gameServiceHost: process.env.GAME_SERVICE_HOST,
+        gameServicePort: process.env.GAME_SERVICE_PORT,
+        gameServiceUrl: process.env.GAME_SERVICE_URL,
       });
 
       if (key) return fromEnv[key];

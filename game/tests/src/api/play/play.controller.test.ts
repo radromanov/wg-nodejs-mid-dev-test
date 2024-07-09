@@ -21,7 +21,7 @@ describe("Play Controller", () => {
   });
 
   it("should return the correct response when playing the game", async () => {
-    const response = await request(server).post("/api/game/play").send({ bet });
+    const response = await request(server).post("/play").send({ bet });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("matrix");

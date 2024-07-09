@@ -24,6 +24,12 @@ export class Config {
       ["development", "production", "testing", "staging"],
       required("process.env.NODE_ENV")
     ),
+    url: z
+      .string(required("process.env.GAME_SERVICE_URL"))
+      .min(
+        HOST_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_URL", HOST_MIN_LENGTH)
+      ),
   });
 
   get(key?: never): ReturnType<typeof this.schema.parse>;
@@ -37,6 +43,7 @@ export class Config {
         host: process.env.GAME_SERVICE_HOST,
         port: process.env.GAME_SERVICE_PORT,
         env: process.env.NODE_ENV,
+        url: process.env.GAME_SERVICE_URL,
       });
 
       if (key) return fromEnv[key];

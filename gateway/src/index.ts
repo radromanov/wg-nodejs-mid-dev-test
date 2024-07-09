@@ -4,8 +4,7 @@ import { Config } from "./lib";
 
 const expr = express();
 const config = new Config();
-const port = config.get("port");
-const app = new Application(expr);
+const app = new Application(expr, config);
 
 app.endpoints();
-app.listen(port);
+app.listen();

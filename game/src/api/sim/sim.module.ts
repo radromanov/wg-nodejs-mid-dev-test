@@ -11,7 +11,7 @@ export class SimModule {
 
   get router() {
     this._router.post(
-      "/sim",
+      "/",
       validate(SimInput),
       catcher(this.controller.handleSim)
     );

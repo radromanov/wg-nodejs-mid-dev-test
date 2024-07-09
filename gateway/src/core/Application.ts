@@ -1,8 +1,9 @@
 import { Express, json, urlencoded } from "express";
 import axios from "axios";
+import { Config, globalError } from "../lib";
 
 export class Application {
-  constructor(private readonly app: Express) {}
+  constructor(private readonly app: Express, private readonly config: Config) {}
 
   private setup() {
     this.app.use(json());
@@ -11,21 +12,50 @@ export class Application {
 
   endpoints() {
     this.setup();
+    const gameServiceUrl = this.config.get("gameServiceUrl");
 
-    this.app.post("/api/game/play", (req, res, next) => {
-      axios
-        .post("http://localhost:3001/api/game/play", req.body)
+    this.app
+      .post("/play", async (req, res, next) => {
+        try {
+          const response = await axios.post<{
+            matrix: string[][];
+            winnings: number;
+          }>(`${gameServiceUrl}/play`, req.body);
 
-        .then((response) => res.send(response.data))
-        .catch((error) => next(error));
-    });
+          res.status(response.status).json({
+            matrix: response.data.matrix,
+            winnings: response.data.winnings,
+          });
+        } catch (error) {
+          next(error);
+        }
+      })
+      .post("/sim", async (req, res, next) => {
+        try {
+          const response = await axios.post<{
+            totalWinnings: number;
+            netResult: number;
+          }>(`${gameServiceUrl}/sim`, req.body);
+
+          res.status(response.status).json({
+            totalWinnings: response.data.totalWinnings,
+            netResult: response.data.netResult,
+          });
+        } catch (error) {
+          next(error);
+        }
+      });
+
+    this.app.use(globalError);
 
     return this.app;
   }
 
-  listen(portNum = 3000) {
-    return this.app.listen(portNum, () =>
-      console.log(`API Gateway running on port ${portNum}`)
+  listen() {
+    const port = this.config.get("port");
+
+    return this.app.listen(port, () =>
+      console.log(`API Gateway running on port ${port}`)
     );
   }
 }
