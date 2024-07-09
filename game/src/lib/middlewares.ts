@@ -19,7 +19,7 @@ export const validate =
       });
 
       if (!valid.success) {
-        throw AppError.UnprocessableEntity(valid.error.errors[0].message);
+        throw AppError.BadRequest(valid.error.errors[0].message);
       }
 
       next();
@@ -55,7 +55,9 @@ export const globalError = (
       message: error.message,
     });
   } else {
+    // Unexpected error occured, construct a 500 Internal Server Error...
     const appError = AppError.InternalServerError();
+
     res.status(appError.status).json({
       status: appError.status,
       stack: appError.trace,

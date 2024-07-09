@@ -21,10 +21,12 @@ import {
 } from "../../lib";
 
 export class PlayService {
+  totalSpins: number;
   matrix: string[][];
   wallet: number;
 
   constructor() {
+    this.totalSpins = 0;
     this.matrix = this.generateMatrix();
     this.wallet = 1000;
     // this.wallet = new WalletService(1000) // TODO Separate into own microservice
@@ -42,6 +44,8 @@ export class PlayService {
 
       symbols.push(randomSymbol);
     }
+
+    this.totalSpins++;
 
     return symbols;
   }
