@@ -3,6 +3,7 @@ import "./dotenv";
 import { z } from "zod";
 import { minimum, required } from "./zod";
 import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "./constants";
+import { AppError } from "../core";
 
 export class Config {
   private schema = z.object({
@@ -42,7 +43,7 @@ export class Config {
       else return fromEnv;
     } catch (error) {
       console.log(error);
-      throw new Error(
+      throw AppError.InternalServerError(
         "Internal Server Error - could not initialize Game Service."
       );
     }

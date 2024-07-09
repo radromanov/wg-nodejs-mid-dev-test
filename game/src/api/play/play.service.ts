@@ -10,6 +10,7 @@
  * 
  */
 
+import { AppError } from "../../core";
 import {
   BET_MULTIPLIER,
   SLOT_COLS,
@@ -64,7 +65,7 @@ export class PlayService {
 
   private deductBet(bet: number) {
     if (bet > this.wallet) {
-      throw new Error("You do not have sufficient funds.");
+      throw AppError.BadRequest("You do not have sufficient funds.");
     }
 
     this.wallet -= bet; // Should be part of TODO WalletService

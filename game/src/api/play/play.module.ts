@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { PlayController } from "./play.controller";
-import { validate } from "../../lib/middlewares";
+import { catcher, validate } from "../../lib";
 import { PlayInput } from "./play.schema";
 
 export class PlayModule {
@@ -10,7 +10,11 @@ export class PlayModule {
   }
 
   get router() {
-    this._router.post("/play", validate(PlayInput), this.controller.handlePlay);
+    this._router.post(
+      "/play",
+      validate(PlayInput),
+      catcher(this.controller.handlePlay)
+    );
 
     return this._router;
   }

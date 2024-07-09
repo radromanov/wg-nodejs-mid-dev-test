@@ -6,6 +6,7 @@ export class PlayController {
 
   handlePlay = async (req: Request, res: Response) => {
     const { bet } = req.body;
+
     const matrix = this.playService.matrix;
     const symbols = this.playService.spin();
     const winnings = this.playService.calculateWinnings(symbols, bet);

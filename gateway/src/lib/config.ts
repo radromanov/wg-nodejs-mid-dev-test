@@ -3,6 +3,7 @@ import "./dotenv";
 import { z } from "zod";
 import { minimum, required } from "./zod";
 import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "./constants";
+import { AppError } from "../core";
 
 export class Config {
   private schema = z.object({
@@ -41,7 +42,9 @@ export class Config {
       if (key) return fromEnv[key];
       else return fromEnv;
     } catch (error) {
-      throw new Error("Internal Server Error - could not initialize gateway.");
+      throw AppError.InternalServerError(
+        "Internal Server Error - could not initialize gateway."
+      );
     }
   }
 }

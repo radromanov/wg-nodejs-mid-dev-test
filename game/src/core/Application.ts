@@ -1,5 +1,6 @@
 import { Express, json, urlencoded } from "express";
 import { PlayController, PlayModule, PlayService } from "../api";
+import { globalError } from "../lib";
 
 export class Application {
   constructor(private readonly app: Express) {}
@@ -16,6 +17,7 @@ export class Application {
     const playModule = new PlayModule(playController);
 
     this.app.use("/api/game", playModule.router);
+    this.app.use(globalError);
 
     return this.app;
   }
