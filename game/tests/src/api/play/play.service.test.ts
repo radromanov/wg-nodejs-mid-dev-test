@@ -24,7 +24,7 @@ describe("Play Service", () => {
   it("should return multiplied bet", () => {
     const spin = ["A", "A", "A"]; // Suppose the user has won (3 of the same kind in a row)
 
-    const { winnings } = playService.calculateWinnings(spin, bet);
+    const winnings = playService.calculateWinnings(spin, bet);
 
     expect(winnings).toBe(bet * BET_MULTIPLIER);
   });

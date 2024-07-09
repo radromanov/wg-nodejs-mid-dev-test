@@ -1,5 +1,5 @@
 import { Express, json, urlencoded } from "express";
-import { PlayModule } from "../api";
+import { PlayController, PlayModule, PlayService } from "../api";
 
 export class Application {
   constructor(private readonly app: Express) {}
@@ -11,9 +11,11 @@ export class Application {
 
   endpoints() {
     this.setup();
-    const playModule = new PlayModule().init();
+    const playService = new PlayService();
+    const playController = new PlayController(playService);
+    const playModule = new PlayModule(playController);
 
-    this.app.use("/api/game", playModule);
+    this.app.use("/api/game", playModule.router);
 
     return this.app;
   }

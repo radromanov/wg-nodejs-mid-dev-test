@@ -55,7 +55,7 @@ export class PlayService {
       this.updateWallet(winnings);
     }
 
-    return { symbols, winnings };
+    return winnings;
   }
 
   private updateWallet(winnings: number) {

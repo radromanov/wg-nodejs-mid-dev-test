@@ -76,7 +76,7 @@
 #### 1. POST /play:
 
 - [ ] **Request Body:** `{ "bet": number }`
-- [ ] **Response:** `{ "matrix": string[][], "winnings": number }`
+- [x] **Response:** `{ "matrix": string[][], "winnings": number }`
 - [x] **Functionality:**
   - [x] Deduct the bet amount from the player's wallet.
   - [x] Perform a random spin using the RNG.

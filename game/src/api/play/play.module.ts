@@ -1,20 +1,15 @@
 import { Router } from "express";
+import { PlayController } from "./play.controller";
 
 export class PlayModule {
-  private router: Router;
-  constructor() {
-    this.router = Router();
+  private _router: Router;
+  constructor(private readonly controller: PlayController) {
+    this._router = Router();
   }
 
-  init() {
-    this.router.post("/play", (req, res) => {
-      const { bet } = req.body;
+  get router() {
+    this._router.post("/play", this.controller.handlePlay);
 
-      console.log(bet);
-
-      res.sendStatus(200);
-    });
-
-    return this.router;
+    return this._router;
   }
 }
