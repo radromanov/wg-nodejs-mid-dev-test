@@ -26,7 +26,7 @@
 
 #### 1. RNG Integration:
 
-- [ ] Integrate an existing Random Number Generator (RNG) library for random selection.
+- [x] Integrate an existing Random Number Generator (RNG) library for random selection. (`Random JS` or JavaScript Native `Math.random()`)
 
 #### 2. Slot Game Logic:
 
@@ -79,7 +79,7 @@
 - [ ] **Response:** `{ "matrix": string[][], "winnings": number }`
 - [ ] **Functionality:**
   - [ ] Deduct the bet amount from the player's wallet.
-  - [ ] Perform a random spin using the RNG.
+  - [x] Perform a random spin using the RNG.
   - [ ] Calculate the winnings based on the final symbol matrix.
   - [ ] Update the player's wallet with the winnings.
   - [ ] Return the final symbol matrix and winnings.
