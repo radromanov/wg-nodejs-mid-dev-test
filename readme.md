@@ -77,12 +77,12 @@
 
 - [ ] **Request Body:** `{ "bet": number }`
 - [ ] **Response:** `{ "matrix": string[][], "winnings": number }`
-- [ ] **Functionality:**
-  - [ ] Deduct the bet amount from the player's wallet.
+- [x] **Functionality:**
+  - [x] Deduct the bet amount from the player's wallet.
   - [x] Perform a random spin using the RNG.
-  - [ ] Calculate the winnings based on the final symbol matrix.
-  - [ ] Update the player's wallet with the winnings.
-  - [ ] Return the final symbol matrix and winnings.
+  - [x] Calculate the winnings based on the final symbol matrix.
+  - [x] Update the player's wallet with the winnings.
+  - [x] Return the final symbol matrix and winnings.
 
 #### 2. POST /sim:
 

@@ -1,11 +1,11 @@
 /**
  * 
- * - [ ] **Functionality:**
-  - [ ] Deduct the bet amount from the player's wallet.
-  - [ ] Perform a random spin using the RNG.
-  - [ ] Calculate the winnings based on the final symbol matrix.
-  - [ ] Update the player's wallet with the winnings.
-  - [ ] Return the final symbol matrix and winnings.
+ * - [x] **Functionality:**
+  - [x] Deduct the bet amount from the player's wallet.
+  - [x] Perform a random spin using the RNG.
+  - [x] Calculate the winnings based on the final symbol matrix.
+  - [x] Update the player's wallet with the winnings.
+  - [x] Return the final symbol matrix and winnings.
  * 
  * 
  */
@@ -21,9 +21,12 @@ import {
 
 export class PlayService {
   matrix: string[][];
+  wallet: number;
 
   constructor() {
     this.matrix = this.generateMatrix();
+    this.wallet = 1000;
+    // this.wallet = new WalletService(1000) // TODO Separate into own microservice
   }
 
   spin() {
@@ -42,19 +45,30 @@ export class PlayService {
     return symbols;
   }
   calculateWinnings(symbols: string[], bet: number) {
+    this.deductBet(bet);
+
     let winnings = 0;
     const isWinning = allEqual(symbols);
 
     if (isWinning) {
       winnings += bet * BET_MULTIPLIER;
+      this.updateWallet(winnings);
     }
 
-    return winnings;
+    return { symbols, winnings };
   }
 
-  deductBet() {}
-  updateWallet() {}
+  private updateWallet(winnings: number) {
+    this.wallet += winnings; // Should be part of TODO WalletService
+  }
 
+  private deductBet(bet: number) {
+    if (bet > this.wallet) {
+      throw new Error("You do not have sufficient funds.");
+    }
+
+    this.wallet -= bet; // Should be part of TODO WalletService
+  }
   private generateMatrix() {
     const matrix: string[][] = [];
     for (let i = 0; i < SLOT_COLS; i++) {

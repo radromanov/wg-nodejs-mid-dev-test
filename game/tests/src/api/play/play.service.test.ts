@@ -13,8 +13,6 @@ describe("Play Service", () => {
   it("should contain methods", () => {
     expect(playService).toHaveProperty("spin");
     expect(playService).toHaveProperty("calculateWinnings");
-    expect(playService).toHaveProperty("deductBet");
-    expect(playService).toHaveProperty("updateWallet");
   });
 
   it("should return a spin", () => {
@@ -26,8 +24,8 @@ describe("Play Service", () => {
   it("should return multiplied bet", () => {
     const spin = ["A", "A", "A"]; // Suppose the user has won (3 of the same kind in a row)
 
-    const check = playService.calculateWinnings(spin, bet);
+    const { winnings } = playService.calculateWinnings(spin, bet);
 
-    expect(check).toBe(bet * BET_MULTIPLIER);
+    expect(winnings).toBe(bet * BET_MULTIPLIER);
   });
 });
