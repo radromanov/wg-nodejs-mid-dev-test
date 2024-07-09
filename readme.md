@@ -75,7 +75,7 @@
 
 #### 1. POST /play:
 
-- [ ] **Request Body:** `{ "bet": number }`
+- [x] **Request Body:** `{ "bet": number }`
 - [x] **Response:** `{ "matrix": string[][], "winnings": number }`
 - [x] **Functionality:**
   - [x] Deduct the bet amount from the player's wallet.
