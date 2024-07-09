@@ -1,23 +1,19 @@
-import { MersenneTwister19937, Random } from "random-js";
 import { SLOT_COLS, SLOT_ROWS, SLOT_SYMBOLS } from "./constants";
 
-export function rand() {
-  const engine = MersenneTwister19937.autoSeed();
-  return new Random(engine);
-}
-
-export function generateRandomMatrix() {
-  const matrix = [];
-
+export function generateMatrix() {
+  const matrix: string[][] = [];
   for (let i = 0; i < SLOT_COLS; i++) {
-    const row = [];
+    const rows: string[] = [];
 
     for (let j = 0; j < SLOT_ROWS; j++) {
-      const randomIndex = rand().integer(0, SLOT_SYMBOLS.length - 1);
-      row.push(SLOT_SYMBOLS[randomIndex]!);
+      // Can use an external library such as Random JS
+      // We are using the native JavaScript way of generating pseudo-random values
+      const randomIndex = Math.floor(Math.random() * SLOT_SYMBOLS.length);
+      const randomSymbol = SLOT_SYMBOLS[randomIndex];
+      rows.push(randomSymbol);
     }
 
-    matrix.push(row);
+    matrix.push(rows);
   }
 
   return matrix;
@@ -25,10 +21,12 @@ export function generateRandomMatrix() {
 
 export function calculateWinnings(matrix: string[][], bet: number) {
   let winnings = 0;
-  for (let i = 0; i < 3; i++) {
+
+  for (let i = 0; i < matrix.length; i++) {
     if (matrix[i][0] === matrix[i][1] && matrix[i][1] === matrix[i][2]) {
-      winnings += bet * 5; // Winning rule: 3 identical symbols in a row
+      winnings += bet * 5; // Multiply by 5 if 3 of the same symbol
     }
   }
+
   return winnings;
 }
