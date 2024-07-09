@@ -7,10 +7,10 @@ import {
   SimModule,
   SimService,
 } from "../api";
-import { globalError } from "../lib";
+import { Config, globalError } from "../lib";
 
 export class Application {
-  constructor(private readonly app: Express) {}
+  constructor(private readonly app: Express, private readonly config: Config) {}
 
   private setup() {
     this.app.use(json());
@@ -36,7 +36,7 @@ export class Application {
   }
 
   listen(portNum?: number) {
-    portNum = portNum || 3000;
+    portNum = portNum || this.config.get("port");
 
     return this.app.listen(portNum, () =>
       console.log(`Game Service running on port ${portNum}`)

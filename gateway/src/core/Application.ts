@@ -51,11 +51,11 @@ export class Application {
     return this.app;
   }
 
-  listen() {
-    const port = this.config.get("port");
+  listen(portNum?: number) {
+    portNum = portNum || this.config.get("port");
 
-    return this.app.listen(port, () =>
-      console.log(`API Gateway running on port ${port}`)
+    return this.app.listen(portNum, () =>
+      console.log(`API Gateway running on port ${portNum}`)
     );
   }
 }
