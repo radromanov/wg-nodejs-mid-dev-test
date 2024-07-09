@@ -86,14 +86,14 @@
 
 #### 2. POST /sim:
 
-- [ ] **Request Body:** `{ "count": number, "bet": number }`
-- [ ] **Response:** `{ "totalWinnings": number, "netResult": number }`
-- [ ] **Functionality:**
-  - [ ] Deduct the total bet amount (bet \* count) from the player's wallet.
-  - [ ] Perform the specified number of spins.
-  - [ ] Calculate the total winnings and net result (total winnings - total bet).
-  - [ ] Update the player's wallet with the total winnings.
-  - [ ] Return the total winnings and net result.
+- [x] **Request Body:** `{ "count": number, "bet": number }`
+- [x] **Response:** `{ "totalWinnings": number, "netResult": number }`
+- [x] **Functionality:**
+  - [x] Deduct the total bet amount (bet \* count) from the player's wallet.
+  - [x] Perform the specified number of spins.
+  - [x] Calculate the total winnings and net result (total winnings - total bet).
+  - [x] Update the player's wallet with the total winnings.
+  - [x] Return the total winnings and net result.
 
 #### 3. GET /rtp:
 

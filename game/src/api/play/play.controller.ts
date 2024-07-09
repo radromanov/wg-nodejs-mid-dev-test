@@ -7,10 +7,8 @@ export class PlayController {
   handlePlay = async (req: Request, res: Response) => {
     const { bet } = req.body;
 
-    const matrix = this.playService.matrix;
-    const symbols = this.playService.spin();
-    const winnings = this.playService.calculateWinnings(symbols, bet);
+    const { matrix, winnings } = this.playService.play(bet);
 
-    res.status(200).send({ matrix, winnings });
+    res.status(200).json({ matrix, winnings });
   };
 }

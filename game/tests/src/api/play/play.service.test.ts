@@ -1,31 +1,48 @@
 import { PlayService } from "../../../../src/api/play/play.service";
-import { BET_MULTIPLIER, TOTAL_SLOTS } from "../../../../src/lib";
+import { BET_MULTIPLIER, SLOT_COLS, SLOT_ROWS } from "../../../../src/lib";
 
 describe("Play Service", () => {
   let playService: PlayService;
-  let bet: number;
+  const bet = 100;
+  const wallet = 2000;
 
   beforeAll(() => {
-    playService = new PlayService();
-    bet = 100;
+    playService = new PlayService(wallet);
   });
 
   it("should contain methods", () => {
-    expect(playService).toHaveProperty("spin");
-    expect(playService).toHaveProperty("calculateWinnings");
+    expect(playService).toHaveProperty("play");
   });
 
-  it("should return a spin", () => {
-    const spin = playService.spin();
-
-    expect(spin.length).toBe(TOTAL_SLOTS);
+  it("should return a matrix and winnings", () => {
+    const result = playService.play(bet);
+    expect(result).toHaveProperty("matrix");
+    expect(result).toHaveProperty("winnings");
+    expect(result.matrix.length).toBe(SLOT_COLS);
+    result.matrix.forEach((column) => {
+      expect(column.length).toBe(SLOT_ROWS);
+    });
   });
 
-  it("should return multiplied bet", () => {
-    const spin = ["A", "A", "A"]; // Suppose the user has won (3 of the same kind in a row)
+  it("should deduct the bet amount from the wallet", () => {
+    let initialWallet = wallet;
+    playService.play(bet);
+    initialWallet -= bet;
 
-    const winnings = playService.calculateWinnings(spin, bet);
+    expect(initialWallet).toBe(wallet - bet);
+  });
 
-    expect(winnings).toBe(bet * BET_MULTIPLIER);
+  it("should update the wallet with winnings if symbols are equal", () => {
+    jest.spyOn(playService as any, "spin").mockReturnValue(["A", "A", "A"]);
+    const result = playService.play(bet);
+
+    expect(result.winnings).toBe(bet * BET_MULTIPLIER);
+  });
+
+  it("should return zero winnings if symbols are not equal", () => {
+    jest.spyOn(playService as any, "spin").mockReturnValue(["A", "B", "C"]);
+
+    const result = playService.play(bet);
+    expect(result.winnings).toBe(0);
   });
 });

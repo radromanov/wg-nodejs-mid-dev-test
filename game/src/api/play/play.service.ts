@@ -21,18 +21,28 @@ import {
 } from "../../lib";
 
 export class PlayService {
-  totalSpins: number;
-  matrix: string[][];
-  wallet: number;
+  private totalSpins: number;
+  private matrix: string[][];
+  private wallet: number;
 
-  constructor() {
+  constructor(initialWallet = 1000) {
     this.totalSpins = 0;
     this.matrix = this.generateMatrix();
-    this.wallet = 1000;
-    // this.wallet = new WalletService(1000) // TODO Separate into own microservice
+    this.wallet = initialWallet;
   }
 
-  spin() {
+  play(bet: number) {
+    this.deductBet(bet);
+
+    const symbols = this.spin();
+    const winnings = this.calculateWinnings(symbols, bet);
+
+    this.updateWallet(winnings);
+
+    return { matrix: this.matrix, winnings };
+  }
+
+  private spin() {
     // Perform a random spin on the matrix
     const symbols: string[] = [];
 
@@ -49,31 +59,26 @@ export class PlayService {
 
     return symbols;
   }
-  calculateWinnings(symbols: string[], bet: number) {
-    this.deductBet(bet);
 
-    let winnings = 0;
-    const isWinning = allEqual(symbols);
-
-    if (isWinning) {
-      winnings += bet * BET_MULTIPLIER;
-      this.updateWallet(winnings);
-    }
-
+  private calculateWinnings(symbols: string[], bet: number) {
+    const winnings = allEqual(symbols) ? bet * BET_MULTIPLIER : 0;
     return winnings;
-  }
-
-  private updateWallet(winnings: number) {
-    this.wallet += winnings; // Should be part of TODO WalletService
   }
 
   private deductBet(bet: number) {
     if (bet > this.wallet) {
-      throw AppError.BadRequest("You do not have sufficient funds.");
+      throw AppError.BadRequest(`Insufficient funds to make bet of ${bet}.`);
     }
 
     this.wallet -= bet; // Should be part of TODO WalletService
+    return this.wallet;
   }
+
+  private updateWallet(amount: number) {
+    this.wallet += amount; // Should be part of TODO WalletService
+    return this.wallet;
+  }
+
   private generateMatrix() {
     const matrix: string[][] = [];
     for (let i = 0; i < SLOT_COLS; i++) {
