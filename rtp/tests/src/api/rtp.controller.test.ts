@@ -6,7 +6,7 @@ describe("/rtp", () => {
 
   describe("GET /", () => {
     it("should return the correct response body", async () => {
-      const response = await request(endpoints).post("/");
+      const response = await request(endpoints).get("/rtp");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("rtp");

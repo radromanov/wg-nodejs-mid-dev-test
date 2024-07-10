@@ -1,6 +1,8 @@
 import { Express, json, urlencoded } from "express";
 import { Config } from "./Config";
 
+import { RtpModule, RtpController } from "@api/rtp";
+
 import { globalError } from "@lib/middlewares";
 
 export class Application {
@@ -14,7 +16,11 @@ export class Application {
   endpoints() {
     this.setup();
 
+    const rtpController = new RtpController();
+    const rtpModule = new RtpModule(rtpController);
+
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
+    this.app.use("/rtp", rtpModule.router);
 
     this.app.use(globalError);
 
