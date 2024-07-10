@@ -1,5 +1,5 @@
-import { errors, minimum } from "@lib/zod";
 import z from "zod";
+import { errors, minimum } from "@lib/zod";
 
 export const WalletInput = z.object({
   body: z.object({

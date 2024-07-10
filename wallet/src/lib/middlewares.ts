@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import z from "zod";
-import { AppError } from "../core";
+import { AppError } from "@core/AppError";
 
 /**
  * Validates the incoming user request and throws and error if invalid.

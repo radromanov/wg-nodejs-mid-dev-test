@@ -1,19 +1,14 @@
+import { app } from "@api/app";
 import request from "supertest";
-import { endpoints, server } from "../../../src";
 
 describe("Wallet Controller", () => {
-  let serviceRoutes = endpoints;
-  let serviceServer = server;
   const currentBalance = 1000;
-
-  afterAll(() => {
-    serviceServer.close();
-  });
+  const endpoints = app.endpoints();
 
   it("should make a valid GET request and respond with currentBalance", async () => {
     const endpoint = "/wallet/balance";
 
-    const response = await request(serviceRoutes).get(endpoint);
+    const response = await request(endpoints).get(endpoint);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("currentBalance");
@@ -24,7 +19,7 @@ describe("Wallet Controller", () => {
     const endpoint = "/wallet/deposit";
     let depositAmount = 1000;
 
-    const response = await request(serviceRoutes)
+    const response = await request(endpoints)
       .post(endpoint)
       .send({ amount: depositAmount });
 
@@ -35,7 +30,7 @@ describe("Wallet Controller", () => {
     const endpoint = "/wallet/withdraw";
     let withdrawAmount = 1000;
 
-    const response = await request(serviceRoutes)
+    const response = await request(endpoints)
       .post(endpoint)
       .send({ amount: withdrawAmount });
 

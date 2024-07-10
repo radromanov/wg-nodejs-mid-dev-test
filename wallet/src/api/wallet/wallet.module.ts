@@ -1,7 +1,9 @@
 import { Router } from "express";
+
 import { WalletController } from "./wallet.controller";
-import { catcher, validate } from "@lib/middlewares";
 import { WalletInput } from "./wallet.schema";
+
+import { catcher, validate } from "@lib/middlewares";
 
 export class WalletModule {
   private _router: Router;

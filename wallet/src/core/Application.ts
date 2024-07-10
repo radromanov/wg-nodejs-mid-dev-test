@@ -1,6 +1,7 @@
 import { Express, json, urlencoded } from "express";
 import { Config } from "./Config";
-import { globalError } from "../lib";
+
+import { globalError } from "@lib/middlewares";
 import { WalletController, WalletModule, WalletService } from "@api/wallet";
 
 export class Application {
@@ -18,6 +19,7 @@ export class Application {
     const walletController = new WalletController(walletService);
     const walletModule = new WalletModule(walletController);
 
+    this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app.use("/wallet", walletModule.router);
 
     this.app.use(globalError);
