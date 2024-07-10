@@ -35,6 +35,7 @@
   },
   "_moduleAliases": {
     "@core": "./src/core",
-    "@lib": "./src/lib"
+    "@lib": "./src/lib",
+    "@api": "./src/api"
   }
 }

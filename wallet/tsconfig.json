@@ -14,7 +14,8 @@
     "baseUrl": "./src",
     "paths": {
       "@core/*": ["./core/*"],
-      "@lib/*": ["./lib/*"]
+      "@lib/*": ["./lib/*"],
+      "@api/*": ["./api/*"]
     },
 
     "strict": true,
