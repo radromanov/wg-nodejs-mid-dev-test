@@ -30,6 +30,26 @@ export class Config {
         HOST_MIN_LENGTH,
         minimum("process.env.GAME_SERVICE_URL", HOST_MIN_LENGTH)
       ),
+
+    walletServiceHost: z
+      .string(required("process.env.WALLET_SERVICE_HOST"))
+      .min(
+        HOST_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_HOST", HOST_MIN_LENGTH)
+      ),
+    walletServicePort: z
+      .string(required("process.env.WALLET_SERVICE_PORT"))
+      .min(
+        PORT_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_PORT", PORT_MIN_LENGTH)
+      )
+      .transform((val) => parseInt(val, 10)),
+    walletServiceUrl: z
+      .string(required("process.env.WALLET_SERVICE_URL"))
+      .min(
+        HOST_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_URL", HOST_MIN_LENGTH)
+      ),
   });
 
   get(key?: never): ReturnType<typeof this.schema.parse>;
@@ -44,6 +64,9 @@ export class Config {
         port: process.env.GAME_SERVICE_PORT,
         env: process.env.NODE_ENV,
         url: process.env.GAME_SERVICE_URL,
+        walletServiceHost: process.env.WALLET_SERVICE_HOST,
+        walletServicePort: process.env.WALLET_SERVICE_PORT,
+        walletServiceUrl: process.env.WALLET_SERVICE_URL,
       });
 
       if (key) return fromEnv[key];

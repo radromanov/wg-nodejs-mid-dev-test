@@ -1,6 +1,8 @@
 # Slot Machine Game Microservices
 
-This project is part of a practical test, and has been built with the intent of satisfying the requirements highlighted in the `requirements.md` file. Said requirements _do not_ specify the need to split the code into microservices, however, I've taken it upon myself to attempt to simulate real-world projects (while staying simplistic and minimalistic, as I do not employ features such as message brokers, databases, authentication, caching, and etc.). I am aware that improvements can be made to both structure and implementation (communication via HTTP which is currently synchronous is one example), although I would like for this project to serve as a preview to what I can accomplish given my current situation, as well as deadlines (despite those same deadlines being more than friendly).
+This project is part of a practical test, and has been built with the intent of satisfying the requirements highlighted in the `requirements.md` file. Said requirements _do not_ specify the need to split the code into microservices, however, I've taken it upon myself to attempt to simulate real-world projects (while staying simplistic and minimalistic, as I do not employ features such as message brokers, databases, authentication, caching, and etc.).
+
+I am aware that improvements can be made to both structure and implementation (communication via HTTP which is currently synchronous is one example), although I would like for this project to serve as a preview to what I can accomplish given my current situation, as well as deadlines (despite those same deadlines being more than friendly).
 
 I would be more than happy to receive feedback on the back of this project, as well as areas I can look to improve in or simply research.
 
@@ -42,7 +44,7 @@ Each service has its own unique `.env` file, the structure/contents of which are
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/your-username/slot-machine-game.git
+   git clone https://github.com/radromanov/wg-nodejs-mid-dev-test.git
    cd slot-machine-game
    ```
 

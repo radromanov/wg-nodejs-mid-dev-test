@@ -1,4 +1,3 @@
-import { AppError } from "@core/AppError";
 import {
   BET_MULTIPLIER,
   SLOT_COLS,
@@ -10,22 +9,15 @@ import { allEqual, rand } from "@lib/utils";
 export class PlayService {
   private totalSpins: number;
   private matrix: string[][];
-  private wallet: number;
 
-  constructor(initialWallet = 1000) {
+  constructor() {
     this.totalSpins = 0;
     this.matrix = this.generateMatrix();
-    this.wallet = initialWallet;
   }
 
-  play(bet: number) {
-    this.deductBet(bet);
-
+  async play(bet: number) {
     const symbols = this.spin();
     const winnings = this.calculateWinnings(symbols, bet);
-
-    this.updateWallet(winnings);
-
     return { matrix: this.matrix, winnings };
   }
 
@@ -50,20 +42,6 @@ export class PlayService {
   private calculateWinnings(symbols: string[], bet: number) {
     const winnings = allEqual(symbols) ? bet * BET_MULTIPLIER : 0;
     return winnings;
-  }
-
-  private deductBet(bet: number) {
-    if (bet > this.wallet) {
-      throw AppError.BadRequest(`Insufficient funds to make bet of ${bet}.`);
-    }
-
-    this.wallet -= bet; // Should be part of TODO WalletService
-    return this.wallet;
-  }
-
-  private updateWallet(amount: number) {
-    this.wallet += amount; // Should be part of TODO WalletService
-    return this.wallet;
   }
 
   private generateMatrix() {

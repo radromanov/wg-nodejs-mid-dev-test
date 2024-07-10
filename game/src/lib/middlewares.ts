@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import z from "zod";
 import { AppError } from "@core/AppError";
+import { AxiosError } from "axios";
 
 /**
  * Validates the incoming user request and throws and error if invalid.
@@ -54,6 +55,17 @@ export const globalError = (
       stack: error.trace,
       message: error.message,
     });
+  } else if (
+    error instanceof AxiosError &&
+    error.response?.data &&
+    "status" in error.response.data &&
+    "stack" in error.response.data &&
+    "message" in error.response.data
+  ) {
+    const err = error.response.data;
+    res
+      .status(err.status)
+      .json({ status: err.status, stack: err.stack, message: err.message });
   } else {
     // Unexpected error occured, construct a 500 Internal Server Error...
     const appError = AppError.InternalServerError();

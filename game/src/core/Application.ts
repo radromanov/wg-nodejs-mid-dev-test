@@ -6,6 +6,8 @@ import { Config } from "@core/Config";
 
 import { PlayController, PlayModule, PlayService } from "@api/play";
 import { SimController, SimModule, SimService } from "@api/sim";
+import { WalletService } from "@api/wallet";
+import { walletApi } from "@lib/axios";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -17,12 +19,13 @@ export class Application {
 
   endpoints() {
     this.setup();
+    const walletService = new WalletService(walletApi);
     const playService = new PlayService();
-    const playController = new PlayController(playService);
+    const playController = new PlayController(playService, walletService);
     const playModule = new PlayModule(playController);
 
     const simService = new SimService(playService);
-    const simController = new SimController(simService);
+    const simController = new SimController(simService, walletService);
     const simModule = new SimModule(simController);
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
