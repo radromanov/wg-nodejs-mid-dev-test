@@ -1,19 +1,13 @@
 import request from "supertest";
-import { endpoints, server } from "@root";
+import { app } from "@api/app";
 
 describe("Sim Controller", () => {
   const bet = 100;
   const count = 5;
-
-  let serviceRoutes = endpoints;
-  let serviceServer = server;
-
-  afterAll(() => {
-    serviceServer.close();
-  });
+  const endpoints = app.endpoints();
 
   it("should throw a 400", async () => {
-    const response = await request(serviceRoutes)
+    const response = await request(endpoints)
       .post("/sim")
       .send({ be: "some value" });
 
@@ -26,7 +20,7 @@ describe("Sim Controller", () => {
   });
 
   it("should return the correct response body", async () => {
-    const response = await request(server).post("/sim").send({ count, bet });
+    const response = await request(endpoints).post("/sim").send({ count, bet });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("totalWinnings");

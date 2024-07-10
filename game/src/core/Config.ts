@@ -1,9 +1,9 @@
-import "../lib/dotenv";
-
+import "@lib/dotenv";
 import { z } from "zod";
-import { minimum, required } from "../lib/zod";
-import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "../lib/constants";
-import { AppError } from ".";
+import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "@lib/constants";
+import { minimum, required } from "@lib/zod";
+
+import { AppError } from "./AppError";
 
 export class Config {
   private schema = z.object({

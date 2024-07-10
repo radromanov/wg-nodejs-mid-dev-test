@@ -25,6 +25,7 @@ export class Application {
     const simController = new SimController(simService);
     const simModule = new SimModule(simController);
 
+    this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app.use("/play", playModule.router);
     this.app.use("/sim", simModule.router);
 
