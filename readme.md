@@ -1,126 +1,182 @@
-# Node.js Developer Task
+# Slot Machine Game Microservices
 
-## Tasks:
+This project is part of a practical test, and has been built with the intent of satisfying the requirements highlighted in the `requirements.md` file. Said requirements _do not_ specify the need to split the code into microservices, however, I've taken it upon myself to attempt to simulate real-world projects (while staying simplistic and minimalistic, as I do not employ features such as message brokers, databases, authentication, caching, and etc.). I am aware that improvements can be made to both structure and implementation (communication via HTTP which is currently synchronous is one example), although I would like for this project to serve as a preview to what I can accomplish given my current situation, as well as deadlines (despite those same deadlines being more than friendly).
 
-### Objective:
+I would be more than happy to receive feedback on the back of this project, as well as areas I can look to improve in or simply research.
 
-- Create an API for simulating a slot casino game with three endpoints.
+## Table of Contents
 
-### Endpoints:
+- [Slot Machine Game Microservices](#slot-machine-game-microservices)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Access the APIs](#access-the-apis)
+    - [Testing the Routes](#testing-the-routes)
+      - [Example using curl:](#example-using-curl)
+  - [Available Routes](#available-routes)
+    - [Gateway Routes](#gateway-routes)
+  - [Environment Variables](#environment-variables)
+  - [License](#license)
 
-#### 1. POST /play:
+## Prerequisites
 
-- Executes a random spin.
-- Calculates and returns the final symbol matrix and winnings.
+Make sure you have the following installed on your system:
 
-#### 2. POST /sim:
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-- Accepts a parameter "count" which specifies the number of spins to simulate.
-- Returns the total profit or loss from the specified number of spins.
+Each service has its own unique `.env` file, the structure/contents of which are highlighted in a `.env.example` file. Make sure you include your own `.env` file within the root of each directory. More detailed description can be found [here](#environment-variables). Example:
 
-#### 3. GET /rtp:
+```bash
+├── gateway/
+|   ├── src/
+|   ├── .env.example    # Use this file as a template
+|   └── .env            # to fill out this file
+└── ...
 
-- Returns the Return to Player (RTP) percentage based on all spins made so far (total bets vs. total winnings).
+```
 
-### Requirements:
+## Installation
 
-#### 1. RNG Integration:
+1. Clone the repository:
 
-- Integrate an existing Random Number Generator (RNG) library for random selection. (`Random JS` or JavaScript Native `Math.random()`)
+   ```sh
+   git clone https://github.com/your-username/slot-machine-game.git
+   cd slot-machine-game
+   ```
 
-#### 2. Slot Game Logic:
+2. Build and start the services using Docker Compose:
+   ```sh
+   docker compose up
+   docker compose up -d # To start in detached mode
+   ```
 
-- Operates on a 3x3 matrix.
-- Uses 3 predefined rows of symbols with 5 different symbols.
-- Randomly selects 3 positions using the RNG.
-- Calculates winnings: Each combination of 3 identical symbols in a row wins 5 times the bet.
+This will build and start the following services:
 
-#### 3. Detailed Functionality:
+- Gateway service
+- Game service
+- Wallet service
 
-##### /play:
+## Usage
 
-- Executes a single random spin, calculates the winnings, and returns the final symbol matrix and winnings.
+Once the services are up and running, you can access the APIs via the exposed ports.
 
-##### /sim:
+### Access the APIs
 
-- Accepts a "count" parameter, performs the specified number of spins, and returns the total profit or loss.
+- **Gateway service**: `http://localhost:3000`
+- **Game service**: `http://localhost:3001`
+- **Wallet service**: `http://localhost:3002`
 
-##### /rtp:
+### Testing the Routes
 
-- Returns the RTP percentage based on all spins made so far (total bets vs. total winnings).
+You can use tools like `curl`, `Postman`, or any HTTP client to test the available routes.
 
-## Bonus Requirements:
+#### Example using curl:
 
-### 1. Error Handling:
+- **Play route**:
 
-- Implement robust error handling for all endpoints.
-- Ensure the API gracefully handles invalid input, such as missing or incorrect parameters.
-- Return appropriate HTTP status codes and error messages.
+  ```sh
+  curl -X GET http://localhost:3001/play
+  ```
 
-### 2. Automated Tests:
+- **Sim route**:
 
-- Write automated tests to ensure the correctness of the implemented functionality.
-- Include unit tests for individual components and integration tests for the API endpoints.
+  ```sh
+  curl -X GET http://localhost:3001/sim
+  ```
 
-### 3. Wallet Logic:
+- **Deposit to wallet**:
 
-- Implement a "wallet" system to manage player balances.
-- Add logic to handle deposits and withdrawals.
-- Ensure the balance is correctly updated after each play and simulation.
-- Implement error handling for scenarios such as insufficient balance.
+  ```sh
+  curl -X POST http://localhost:3002/wallet/deposit -H "Content-Type: application/json" -d '{"amount": 100}'
+  ```
 
-## Todo:
+- **Withdraw from wallet**:
 
-### Tasks:
+  ```sh
+  curl -X POST http://localhost:3002/wallet/withdraw -H "Content-Type: application/json" -d '{"amount": 50}'
+  ```
 
-#### 1. POST /play:
+- **Check wallet balance**:
+  ```sh
+  curl -X GET http://localhost:3002/wallet/balance
+  ```
 
-- [x] **Request Body:** `{ "bet": number }`
-- [x] **Response:** `{ "matrix": string[][], "winnings": number }`
-- [x] **Functionality:**
-  - [x] Deduct the bet amount from the player's wallet.
-  - [x] Perform a random spin using the RNG.
-  - [x] Calculate the winnings based on the final symbol matrix.
-  - [x] Update the player's wallet with the winnings.
-  - [x] Return the final symbol matrix and winnings.
+## Available Routes
 
-#### 2. POST /sim:
+### Gateway Routes
 
-- [x] **Request Body:** `{ "count": number, "bet": number }`
-- [x] **Response:** `{ "totalWinnings": number, "netResult": number }`
-- [x] **Functionality:**
-  - [x] Deduct the total bet amount (bet \* count) from the player's wallet.
-  - [x] Perform the specified number of spins.
-  - [x] Calculate the total winnings and net result (total winnings - total bet).
-  - [x] Update the player's wallet with the total winnings.
-  - [x] Return the total winnings and net result.
+- **GET /play**
 
-#### 3. GET /rtp:
+  - Description: Route to start playing the slot machine game.
 
-- [ ] **Response:** `{ "rtp": number }`
-- [ ] **Functionality:**
-  - [ ] Calculate the RTP percentage based on all spins made so far.
-  - [ ] Return the RTP percentage.
+- **GET /sim**
 
-### Bonus Requirements:
+  - Description: Route to simulate a game play.
 
-#### 1. Error Handling:
+- **POST /wallet/deposit**
 
-- [x] Validate request parameters and return `400 Bad Request` for invalid input.
-- [x] Return `500 Internal Server Error` for unexpected errors.
-- [x] Provide meaningful error messages to the client.
+  - Description: Route to deposit money into the wallet.
+  - Body Parameters:
+    - `amount` (number): Amount to deposit.
 
-#### 2. Automated Tests:
+- **POST /wallet/withdraw**
 
-- [x] Use a testing framework (e.g., Mocha, Jest) to write unit and integration tests.
-- [ ] Test individual components such as RNG integration, spin logic, and wallet updates.
-- [ ] Test the API endpoints to ensure they return correct responses and handle errors appropriately.
+  - Description: Route to withdraw money from the wallet.
+  - Body Parameters:
+    - `amount` (number): Amount to withdraw.
 
-#### 3. Wallet Logic:
+- **GET /wallet/balance**
+  - Description: Route to check the current wallet balance.
 
-- [x] Implement endpoints for managing the player's wallet:
-  - [x] **POST /wallet/deposit:** Adds funds to the player's wallet.
-  - [x] **POST /wallet/withdraw:** Withdraws funds from the player's wallet.
-  - [x] **GET /wallet/balance:** Returns the current balance.
-- [ ] Ensure the wallet balance is updated correctly after each play and simulation.
-- [ ] Handle errors such as insufficient balance for a bet or withdrawal.
+## Environment Variables
+
+Please make sure you use `docker compose up` to play around with the project. If using the `package.json` `dev` command, you will have to change the host environment variable, as I have defined a network for the containers to run in within the `docker-compose.yml` file. Make sure to configure the following environment variables in a `.env` file at the root of each service (see `.env.example` or below for more details on the key-value pairs):
+
+- **gateway/.env**
+
+  ```env
+  GATEWAY_HOST=http://localhost
+  GATEWAY_PORT=3000
+
+  GAME_SERVICE_URL=http://localhost:3001      # When running outside of Docker compose or...
+  GAME_SERVICE_URL=http://game:3001           # When using Docker compose
+  GAME_SERVICE_PORT=3001
+  GAME_SERVICE_URL=http://localhost:3001      # When running outside of Docker compose or...
+  GAME_SERVICE_URL=http://game:3001           # When using Docker compose
+
+  WALLET_SERVICE_HOST=http://localhost:3002   # When running outside of Docker compose or...
+  WALLET_SERVICE_HOST=http://wallet:3002      # When using Docker compose
+  WALLET_SERVICE_PORT=3002
+  WALLET_SERVICE_URL=http://localhost:3002    # When running outside of Docker compose or...
+  WALLET_SERVICE_URL=http://wallet:3002       # When using Docker compose
+  ```
+
+- **game/.env**
+
+  ```env
+  GAME_SERVICE_URL=http://localhost:3001 # When running outside of Docker compose or...
+  GAME_SERVICE_URL=http://game:3001      # When using Docker compose
+  GAME_SERVICE_PORT=3001
+  GAME_SERVICE_URL=http://localhost:3001 # When running outside of Docker compose or...
+  GAME_SERVICE_URL=http://game:3001      # When using Docker compose
+  ```
+
+- **wallet/.env**
+
+  ```env
+  WALLET_SERVICE_HOST=http://localhost:3002  # When running outside of Docker compose or...
+  WALLET_SERVICE_HOST=http://wallet:3002     # When using Docker compose
+  WALLET_SERVICE_PORT=3002
+  WALLET_SERVICE_URL=http://localhost:3002   # When running outside of Docker compose or...
+  WALLET_SERVICE_URL=http://wallet:3002      # When using Docker compose
+  ```
+
+## License
+
+This project is licensed under the ISC License.
+
+```
+
+```

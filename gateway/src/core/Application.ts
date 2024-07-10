@@ -14,6 +14,7 @@ export class Application {
     this.setup();
     const { gameServiceUrl, walletServiceUrl } = this.config.get();
 
+    this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app
       .post("/play", async (req, res, next) => {
         try {
