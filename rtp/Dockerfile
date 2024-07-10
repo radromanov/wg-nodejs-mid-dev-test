@@ -14,7 +14,7 @@ RUN npm install -g pnpm && pnpm install
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 3002
+EXPOSE 3003
 
 # Define the command to run the app
 CMD ["pnpm", "dev"]
