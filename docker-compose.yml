@@ -35,6 +35,17 @@ services:
     networks:
       - slot-game-network
 
+  rtp:
+    build: ./rtp
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./rtp/.env
+    networks:
+      - slot-game-network
+
 networks:
   slot-game-network:
     driver: bridge
