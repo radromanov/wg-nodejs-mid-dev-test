@@ -1,31 +1,19 @@
-import express, { Express } from "express";
 import request from "supertest";
-import { Application } from "../../../../src/core";
-import { IncomingMessage, Server, ServerResponse } from "http";
-import { Config } from "../../../../src/lib";
+import { endpoints, server } from "@root";
 
 describe("Sim Controller", () => {
   const bet = 100;
   const count = 5;
-  let config: Config;
-  let expr: Express;
-  let app: Application;
-  let server: Server<typeof IncomingMessage, typeof ServerResponse>;
 
-  beforeAll(() => {
-    config = new Config();
-    expr = express();
-    app = new Application(expr, config);
-    app.endpoints();
-    server = app.listen(4445);
-  });
+  let serviceRoutes = endpoints;
+  let serviceServer = server;
 
   afterAll(() => {
-    server.close();
+    serviceServer.close();
   });
 
   it("should throw a 400", async () => {
-    const response = await request(server)
+    const response = await request(serviceRoutes)
       .post("/sim")
       .send({ be: "some value" });
 

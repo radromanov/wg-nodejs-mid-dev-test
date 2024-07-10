@@ -1,24 +1,11 @@
-/**
- * 
- * - [x] **Functionality:**
-  - [x] Deduct the bet amount from the player's wallet.
-  - [x] Perform a random spin using the RNG.
-  - [x] Calculate the winnings based on the final symbol matrix.
-  - [x] Update the player's wallet with the winnings.
-  - [x] Return the final symbol matrix and winnings.
- * 
- * 
- */
-
-import { AppError } from "../../core";
+import { AppError } from "@core/AppError";
 import {
   BET_MULTIPLIER,
   SLOT_COLS,
   SLOT_ROWS,
   SLOT_SYMBOLS,
-  allEqual,
-  rand,
-} from "../../lib";
+} from "@lib/constants";
+import { allEqual, rand } from "@lib/utils";
 
 export class PlayService {
   private totalSpins: number;

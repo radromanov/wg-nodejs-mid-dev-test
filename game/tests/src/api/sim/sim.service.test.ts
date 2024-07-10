@@ -1,4 +1,5 @@
-import { PlayService, SimService } from "../../../../src/api";
+import { PlayService } from "@api/play";
+import { SimService } from "@api/sim";
 
 describe("Simulation Service", () => {
   let simService: SimService;
@@ -6,7 +7,7 @@ describe("Simulation Service", () => {
   const spins = 5;
   const wallet = 1000;
 
-  beforeAll(() => {
+  beforeEach(() => {
     let playService = new PlayService(wallet);
     simService = new SimService(playService);
   });

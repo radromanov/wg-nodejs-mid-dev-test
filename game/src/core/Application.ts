@@ -1,13 +1,11 @@
 import { Express, json, urlencoded } from "express";
-import {
-  PlayController,
-  PlayModule,
-  PlayService,
-  SimController,
-  SimModule,
-  SimService,
-} from "../api";
-import { Config, globalError } from "../lib";
+
+import { globalError } from "@lib/middlewares";
+
+import { Config } from "@core/Config";
+
+import { PlayController, PlayModule, PlayService } from "@api/play";
+import { SimController, SimModule, SimService } from "@api/sim";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}

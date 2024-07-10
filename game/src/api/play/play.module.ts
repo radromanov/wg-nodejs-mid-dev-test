@@ -1,6 +1,8 @@
 import { Router } from "express";
+
+import { catcher, validate } from "@lib/middlewares";
+
 import { PlayController } from "./play.controller";
-import { catcher, validate } from "../../lib";
 import { PlayInput } from "./play.schema";
 
 export class PlayModule {

@@ -11,10 +11,18 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
 
+    "baseUrl": "./src",
+    "paths": {
+      "@root": ["./"],
+      "@core/*": ["./core/*"],
+      "@lib/*": ["./lib/*"],
+      "@api/*": ["./api/*"]
+    },
+
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
+    "moduleResolution": "node16"
   },
   "exclude": ["node_modules"]
 }

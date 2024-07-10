@@ -1,30 +1,17 @@
-import express, { Express } from "express";
 import request from "supertest";
-import { Application } from "../../../../src/core";
-import { IncomingMessage, Server, ServerResponse } from "http";
-import { Config } from "../../../../src/lib";
+import { endpoints, server } from "@root";
 
 describe("Play Controller", () => {
   const bet = 100;
-  let config: Config;
-  let expr: Express;
-  let app: Application;
-  let server: Server<typeof IncomingMessage, typeof ServerResponse>;
-
-  beforeAll(() => {
-    config = new Config();
-    expr = express();
-    app = new Application(expr, config);
-    app.endpoints();
-    server = app.listen(4444);
-  });
+  let serviceRoutes = endpoints;
+  let serviceServer = server;
 
   afterAll(() => {
-    server.close();
+    serviceServer.close();
   });
 
   it("should return the correct response body", async () => {
-    const response = await request(server).post("/play").send({ bet });
+    const response = await request(serviceRoutes).post("/play").send({ bet });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("matrix");

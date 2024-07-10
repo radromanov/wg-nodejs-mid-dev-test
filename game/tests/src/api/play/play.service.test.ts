@@ -1,12 +1,12 @@
-import { PlayService } from "../../../../src/api/play/play.service";
-import { BET_MULTIPLIER, SLOT_COLS, SLOT_ROWS } from "../../../../src/lib";
+import { PlayService } from "@api/play";
+import { BET_MULTIPLIER, SLOT_COLS, SLOT_ROWS } from "@lib/constants";
 
 describe("Play Service", () => {
   let playService: PlayService;
   const bet = 100;
   const wallet = 2000;
 
-  beforeAll(() => {
+  beforeEach(() => {
     playService = new PlayService(wallet);
   });
 

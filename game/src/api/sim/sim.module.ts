@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { catcher, validate } from "../../lib";
+
+import { catcher, validate } from "@lib/middlewares";
+
 import { SimInput } from "./sim.schema";
 import { SimController } from "./sim.controller";
 
