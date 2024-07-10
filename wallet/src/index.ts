@@ -1,3 +1,4 @@
+import "module-alias/register";
 import express from "express";
 import { Application, Config } from "./core";
 
