@@ -1,6 +1,7 @@
 import { Express, json, urlencoded } from "express";
 import { Config } from "./Config";
 import { globalError } from "../lib";
+import { WalletController, WalletModule, WalletService } from "@api/wallet";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -12,6 +13,12 @@ export class Application {
 
   endpoints() {
     this.setup();
+
+    const walletService = new WalletService();
+    const walletController = new WalletController(walletService);
+    const walletModule = new WalletModule(walletController);
+
+    this.app.use("/wallet", walletModule.router);
 
     this.app.use(globalError);
 
