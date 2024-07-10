@@ -5,16 +5,16 @@ import { AppError } from "./AppError";
 export class Config {
   private schema = z.object({
     host: z
-      .string(required("process.env.WALLET_SERVICE_HOST"))
+      .string(required("process.env.RTP_SERVICE_HOST"))
       .min(
         HOST_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_HOST", HOST_MIN_LENGTH)
+        minimum("process.env.RTP_SERVICE_HOST", HOST_MIN_LENGTH)
       ),
     port: z
-      .string(required("process.env.WALLET_SERVICE_PORT"))
+      .string(required("process.env.RTP_SERVICE_PORT"))
       .min(
         PORT_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_PORT", PORT_MIN_LENGTH)
+        minimum("process.env.RTP_SERVICE_PORT", PORT_MIN_LENGTH)
       )
       .transform((val) => parseInt(val, 10)),
     env: z.enum(
@@ -22,10 +22,10 @@ export class Config {
       required("process.env.NODE_ENV")
     ),
     url: z
-      .string(required("process.env.WALLET_SERVICE_URL"))
+      .string(required("process.env.RTP_SERVICE_URL"))
       .min(
         HOST_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_URL", HOST_MIN_LENGTH)
+        minimum("process.env.RTP_SERVICE_URL", HOST_MIN_LENGTH)
       ),
   });
 
@@ -37,17 +37,17 @@ export class Config {
     try {
       // Load .env variables
       const fromEnv = this.schema.parse({
-        host: process.env.WALLET_SERVICE_HOST,
-        port: process.env.WALLET_SERVICE_PORT,
+        host: process.env.RTP_SERVICE_HOST,
+        port: process.env.RTP_SERVICE_PORT,
         env: process.env.NODE_ENV,
-        url: process.env.WALLET_SERVICE_URL,
+        url: process.env.RTP_SERVICE_URL,
       });
 
       if (key) return fromEnv[key];
       else return fromEnv;
     } catch (error) {
       throw AppError.InternalServerError(
-        "Internal Server Error - could not initialize Wallet Service."
+        "Internal Server Error - could not initialize RTP Service."
       );
     }
   }
