@@ -22,8 +22,6 @@ export const globalError = (
   res: Response,
   _next: NextFunction
 ) => {
-  console.log(error);
-
   if (error instanceof AppError) {
     res.status(error.status).json({
       status: error.status,

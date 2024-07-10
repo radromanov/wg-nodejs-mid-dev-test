@@ -118,9 +118,9 @@
 
 #### 3. Wallet Logic:
 
-- [ ] Implement endpoints for managing the player's wallet:
-  - [ ] **POST /wallet/deposit:** Adds funds to the player's wallet.
-  - [ ] **POST /wallet/withdraw:** Withdraws funds from the player's wallet.
-  - [ ] **GET /wallet/balance:** Returns the current balance.
+- [x] Implement endpoints for managing the player's wallet:
+  - [x] **POST /wallet/deposit:** Adds funds to the player's wallet.
+  - [x] **POST /wallet/withdraw:** Withdraws funds from the player's wallet.
+  - [x] **GET /wallet/balance:** Returns the current balance.
 - [ ] Ensure the wallet balance is updated correctly after each play and simulation.
 - [ ] Handle errors such as insufficient balance for a bet or withdrawal.

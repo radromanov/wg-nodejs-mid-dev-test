@@ -12,7 +12,7 @@ export class Application {
 
   endpoints() {
     this.setup();
-    const gameServiceUrl = this.config.get("gameServiceUrl");
+    const { gameServiceUrl, walletServiceUrl } = this.config.get();
 
     this.app
       .post("/play", async (req, res, next) => {
@@ -41,6 +41,43 @@ export class Application {
             totalWinnings: response.data.totalWinnings,
             netResult: response.data.netResult,
           });
+        } catch (error) {
+          next(error);
+        }
+      })
+      .post("/wallet/deposit", async (req, res, next) => {
+        try {
+          const response = await axios.post(
+            `${walletServiceUrl}/wallet/deposit`,
+            req.body
+          );
+
+          res.sendStatus(response.status);
+        } catch (error) {
+          next(error);
+        }
+      })
+      .post("/wallet/withdraw", async (req, res, next) => {
+        try {
+          const response = await axios.post(
+            `${walletServiceUrl}/wallet/withdraw`,
+            req.body
+          );
+
+          res.sendStatus(response.status);
+        } catch (error) {
+          next(error);
+        }
+      })
+      .get("/wallet/balance", async (_req, res, next) => {
+        try {
+          const response = await axios.get<{ currentBalance: number }>(
+            `${walletServiceUrl}/wallet/balance`
+          );
+
+          res
+            .status(response.status)
+            .json({ currentBalance: response.data.currentBalance });
         } catch (error) {
           next(error);
         }

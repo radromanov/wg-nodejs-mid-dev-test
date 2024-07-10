@@ -2,12 +2,7 @@ import "./dotenv";
 
 import { z } from "zod";
 import { minimum, required } from "./zod";
-import {
-  GAME_SERVICE_HOST_MIN_LENGTH,
-  GAME_SERVICE_PORT_MIN_LENGTH,
-  HOST_MIN_LENGTH,
-  PORT_MIN_LENGTH,
-} from "./constants";
+import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "./constants";
 import { AppError } from "../core";
 
 export class Config {
@@ -32,21 +27,40 @@ export class Config {
     gameServiceHost: z
       .string(required("process.env.GAME_SERVICE_HOST"))
       .min(
-        GAME_SERVICE_HOST_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_HOST", GAME_SERVICE_HOST_MIN_LENGTH)
+        HOST_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_HOST", HOST_MIN_LENGTH)
       ),
     gameServicePort: z
       .string(required("process.env.GAME_SERVICE_PORT"))
       .min(
-        GAME_SERVICE_PORT_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_PORT", GAME_SERVICE_PORT_MIN_LENGTH)
+        PORT_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_PORT", PORT_MIN_LENGTH)
       )
       .transform((val) => parseInt(val, 10)),
     gameServiceUrl: z
       .string(required("process.env.GAME_SERVICE_URL"))
       .min(
-        GAME_SERVICE_HOST_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_URL", GAME_SERVICE_HOST_MIN_LENGTH)
+        HOST_MIN_LENGTH,
+        minimum("process.env.GAME_SERVICE_URL", HOST_MIN_LENGTH)
+      ),
+    walletServiceHost: z
+      .string(required("process.env.WALLET_SERVICE_HOST"))
+      .min(
+        HOST_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_HOST", HOST_MIN_LENGTH)
+      ),
+    walletServicePort: z
+      .string(required("process.env.WALLET_SERVICE_PORT"))
+      .min(
+        PORT_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_PORT", PORT_MIN_LENGTH)
+      )
+      .transform((val) => parseInt(val, 10)),
+    walletServiceUrl: z
+      .string(required("process.env.WALLET_SERVICE_URL"))
+      .min(
+        HOST_MIN_LENGTH,
+        minimum("process.env.WALLET_SERVICE_URL", HOST_MIN_LENGTH)
       ),
   });
 
@@ -64,6 +78,9 @@ export class Config {
         gameServiceHost: process.env.GAME_SERVICE_HOST,
         gameServicePort: process.env.GAME_SERVICE_PORT,
         gameServiceUrl: process.env.GAME_SERVICE_URL,
+        walletServiceHost: process.env.WALLET_SERVICE_HOST,
+        walletServicePort: process.env.WALLET_SERVICE_PORT,
+        walletServiceUrl: process.env.WALLET_SERVICE_URL,
       });
 
       if (key) return fromEnv[key];
