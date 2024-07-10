@@ -1,13 +1,26 @@
 import { Request, Response } from "express";
+import { RtpService } from "./rtp.service";
 
 export class RtpController {
-  constructor() {}
+  constructor(private readonly service: RtpService) {}
 
   handleRtp = async (_req: Request, res: Response) => {
-    // TODO Calculate the RTP percentage based on all spins made so far.
-    // Game/PlayService keeps track of totalSpins
-    // Communicate with Game Microservice to obtain totalSpins and perform the calculation
-    // Use Axios and create a gameApi instance
     res.status(200).json({ rtp: 100 });
+  };
+
+  handleUpdateBets = async (req: Request, res: Response) => {
+    const { bet } = req.body;
+
+    this.service.updateBets(bet);
+
+    res.sendStatus(200);
+  };
+
+  handleUpdateWinnings = async (req: Request, res: Response) => {
+    const { winning } = req.body;
+
+    this.service.updateWinnings(winning);
+
+    res.sendStatus(200);
   };
 }

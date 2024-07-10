@@ -9,7 +9,10 @@ export class RtpModule {
   }
 
   get router() {
-    this._router.get("/", catcher(this.controller.handleRtp));
+    this._router
+      .get("/", catcher(this.controller.handleRtp))
+      .post("/bets", catcher(this.controller.handleUpdateBets))
+      .post("/winnings", catcher(this.controller.handleUpdateWinnings));
 
     return this._router;
   }

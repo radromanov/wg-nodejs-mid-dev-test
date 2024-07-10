@@ -99,7 +99,7 @@
 
 - [ ] **Response:** `{ "rtp": number }`
 - [ ] **Functionality:**
-  - [ ] Calculate the RTP percentage based on all spins made so far.
+  - [ ] Calculate the RTP percentage based on all spins made so far (total bets vs. total winnings).
   - [ ] Return the RTP percentage.
 
 ### Bonus Requirements:

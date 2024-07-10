@@ -7,17 +7,16 @@ import {
 import { allEqual, rand } from "@lib/utils";
 
 export class PlayService {
-  private totalSpins: number;
   private matrix: string[][];
 
   constructor() {
-    this.totalSpins = 0;
     this.matrix = this.generateMatrix();
   }
 
   async play(bet: number) {
     const symbols = this.spin();
     const winnings = this.calculateWinnings(symbols, bet);
+
     return { matrix: this.matrix, winnings };
   }
 
@@ -33,8 +32,6 @@ export class PlayService {
 
       symbols.push(randomSymbol);
     }
-
-    this.totalSpins++;
 
     return symbols;
   }

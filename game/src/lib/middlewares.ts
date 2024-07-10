@@ -55,17 +55,22 @@ export const globalError = (
       stack: error.trace,
       message: error.message,
     });
-  } else if (
-    error instanceof AxiosError &&
-    error.response?.data &&
-    "status" in error.response.data &&
-    "stack" in error.response.data &&
-    "message" in error.response.data
-  ) {
+  } else if (error instanceof AxiosError && error.response?.data) {
     const err = error.response.data;
-    res
-      .status(err.status)
-      .json({ status: err.status, stack: err.stack, message: err.message });
+
+    if (err.status && err.stack && err.message) {
+      res
+        .status(err.status)
+        .json({ status: err.status, stack: err.stack, message: err.message });
+    } else {
+      const appError = AppError.InternalServerError();
+
+      res.status(appError.status).json({
+        status: appError.status,
+        stack: appError.trace,
+        message: appError.message,
+      });
+    }
   } else {
     // Unexpected error occured, construct a 500 Internal Server Error...
     const appError = AppError.InternalServerError();

@@ -7,7 +7,8 @@ import { Config } from "@core/Config";
 import { PlayController, PlayModule, PlayService } from "@api/play";
 import { SimController, SimModule, SimService } from "@api/sim";
 import { WalletService } from "@api/wallet";
-import { walletApi } from "@lib/axios";
+import { rtpApi, walletApi } from "@lib/axios";
+import { RtpService } from "@api/rtp";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -19,9 +20,16 @@ export class Application {
 
   endpoints() {
     this.setup();
+
     const walletService = new WalletService(walletApi);
+    const rtpService = new RtpService(rtpApi);
+
     const playService = new PlayService();
-    const playController = new PlayController(playService, walletService);
+    const playController = new PlayController(
+      playService,
+      walletService,
+      rtpService
+    );
     const playModule = new PlayModule(playController);
 
     const simService = new SimService(playService);
