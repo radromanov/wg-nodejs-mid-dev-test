@@ -7,7 +7,7 @@ describe("Play Service", () => {
   const wallet = 2000;
 
   beforeEach(() => {
-    playService = new PlayService(wallet);
+    playService = new PlayService();
   });
 
   it("should contain methods", () => {
@@ -15,8 +15,8 @@ describe("Play Service", () => {
   });
 
   describe("Play", () => {
-    it("should return a matrix and winnings", () => {
-      const result = playService.play(bet);
+    it("should return a matrix and winnings", async () => {
+      const result = await playService.play(bet);
       expect(result).toHaveProperty("matrix");
       expect(result).toHaveProperty("winnings");
       expect(result.matrix.length).toBe(SLOT_COLS);
@@ -37,17 +37,17 @@ describe("Play Service", () => {
   });
 
   describe("Update the wallet", () => {
-    it("should update the wallet with winnings if symbols are equal", () => {
+    it("should update the wallet with winnings if symbols are equal", async () => {
       jest.spyOn(playService as any, "spin").mockReturnValue(["A", "A", "A"]);
-      const result = playService.play(bet);
+      const result = await playService.play(bet);
 
       expect(result.winnings).toBe(bet * BET_MULTIPLIER);
     });
 
-    it("should return zero winnings if symbols are not equal", () => {
+    it("should return zero winnings if symbols are not equal", async () => {
       jest.spyOn(playService as any, "spin").mockReturnValue(["A", "B", "C"]);
 
-      const result = playService.play(bet);
+      const result = await playService.play(bet);
       expect(result.winnings).toBe(0);
     });
   });

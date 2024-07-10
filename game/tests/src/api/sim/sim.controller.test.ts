@@ -1,29 +1,45 @@
 import request from "supertest";
 import { app } from "@api/app";
+import { WalletService } from "@api/wallet";
+import { walletApi } from "@lib/axios";
 
-describe("Sim Controller", () => {
+describe("/sim", () => {
   const bet = 100;
-  const count = 5;
+  const count = 3;
   const endpoints = app.endpoints();
 
-  it("should throw a 400", async () => {
-    const response = await request(endpoints)
-      .post("/sim")
-      .send({ be: "some value" });
+  describe("POST /", () => {
+    let walletService: WalletService;
 
-    expect(response.body).toHaveProperty("status");
-    expect(response.body).toHaveProperty("stack");
-    expect(response.body).toHaveProperty("message");
+    beforeAll(() => {
+      walletService = new WalletService(walletApi);
+    });
 
-    expect(response.body.status).toBe(400);
-    expect(response.body.message.length).toBeTruthy();
-  });
+    beforeEach(async () => {
+      await walletService.deposit(bet * count);
+    });
 
-  it("should return the correct response body", async () => {
-    const response = await request(endpoints).post("/sim").send({ count, bet });
+    it("should throw a 400", async () => {
+      const response = await request(endpoints)
+        .post("/sim")
+        .send({ be: "some value" });
 
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("totalWinnings");
-    expect(response.body).toHaveProperty("netResult");
+      expect(response.body).toHaveProperty("status");
+      expect(response.body).toHaveProperty("stack");
+      expect(response.body).toHaveProperty("message");
+
+      expect(response.body.status).toBe(400);
+      expect(response.body.message.length).toBeTruthy();
+    });
+
+    it("should return the correct response body", async () => {
+      const response = await request(endpoints)
+        .post("/sim")
+        .send({ count, bet });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("totalWinnings");
+      expect(response.body).toHaveProperty("netResult");
+    });
   });
 });

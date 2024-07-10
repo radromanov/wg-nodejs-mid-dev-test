@@ -5,16 +5,16 @@ describe("Simulation Service", () => {
   let simService: SimService;
   const bet = 100;
   const spins = 5;
-  const wallet = 1000;
 
   beforeEach(() => {
-    let playService = new PlayService(wallet);
+    let playService = new PlayService();
     simService = new SimService(playService);
   });
 
-  it("should simulate X amount of playService.play() calls", () => {
-    const { totalWinnings, netResult } = simService.simulate(spins, bet);
+  it("should simulate X amount of playService.play() calls", async () => {
+    const totalWinnings = await simService.simulate(spins, bet);
     const totalBet = bet * spins;
+    const netResult = totalWinnings - totalBet;
 
     expect(netResult).toBe(totalWinnings - totalBet);
   });
