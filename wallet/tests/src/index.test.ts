@@ -1,4 +1,3 @@
-import "module-alias/register";
 import request from "supertest";
 import express, { Express } from "express";
 import { Application } from "@core/Application";
