@@ -13,13 +13,13 @@ export class PlayController {
   handlePlay = async (req: Request, res: Response) => {
     const { bet } = req.body;
 
-    await this.rtpService.updateBets(bet);
+    await this.rtpService.recordBet(bet);
     await this.walletService.withdraw(bet);
 
     const { matrix, winnings } = await this.playService.play(bet);
 
     if (winnings) {
-      await this.rtpService.updateWinnings(winnings);
+      await this.rtpService.recordWinning(winnings);
       await this.walletService.deposit(winnings);
     }
 

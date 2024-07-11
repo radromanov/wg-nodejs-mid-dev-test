@@ -33,7 +33,11 @@ export class Application {
     const playModule = new PlayModule(playController);
 
     const simService = new SimService(playService);
-    const simController = new SimController(simService, walletService);
+    const simController = new SimController(
+      simService,
+      walletService,
+      rtpService
+    );
     const simModule = new SimModule(simController);
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));

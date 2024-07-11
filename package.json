@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "concurrently \"cd gateway && pnpm dev\" \"cd game && pnpm dev\" \"cd wallet && pnpm dev\" \"cd rtp && pnpm dev\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

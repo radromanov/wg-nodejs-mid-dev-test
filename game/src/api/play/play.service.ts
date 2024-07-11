@@ -14,7 +14,9 @@ export class PlayService {
   }
 
   async play(bet: number) {
-    const symbols = this.spin();
+    // const symbols = this.spin();
+    // 50% chance to win
+    const symbols = Math.random() > 0.5 ? ["A", "A", "A"] : this.spin();
     const winnings = this.calculateWinnings(symbols, bet);
 
     return { matrix: this.matrix, winnings };

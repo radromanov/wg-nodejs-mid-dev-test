@@ -3,17 +3,19 @@ import { AxiosInstance } from "axios";
 export class RtpService {
   constructor(private readonly rtpApi: AxiosInstance) {}
 
-  async updateBets(bet: number) {
+  async recordBet(amount: number) {
     try {
-      await this.rtpApi.post("/rtp/bets", { bet });
+      // Calls the RTP API to increment the totalBets needed to perform the RTP calculation
+      await this.rtpApi.post("/rtp/bets", { bet: amount });
     } catch (error) {
       throw error; // pass to catcher middleware
     }
   }
 
-  async updateWinnings(winning: number) {
+  async recordWinning(amount: number) {
     try {
-      await this.rtpApi.post("/rtp/winnings", { winning });
+      // Calls the RTP API to increment the totalWinnings needed to perform the RTP calculation
+      await this.rtpApi.post("/rtp/winnings", { winning: amount });
     } catch (error) {
       throw error; // pass to catcher middleware
     }

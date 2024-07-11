@@ -10,18 +10,18 @@ export class RtpController {
     res.status(200).json({ rtp });
   };
 
-  handleUpdateBets = async (req: Request, res: Response) => {
+  handleRecordBet = async (req: Request, res: Response) => {
     const { bet } = req.body;
 
-    this.service.updateBets(bet);
+    this.service.recordBet(bet);
 
     res.sendStatus(200);
   };
 
-  handleUpdateWinnings = async (req: Request, res: Response) => {
+  handleRecordWinning = async (req: Request, res: Response) => {
     const { winning } = req.body;
 
-    this.service.updateWinnings(winning);
+    this.service.recordWinning(winning);
 
     res.sendStatus(200);
   };

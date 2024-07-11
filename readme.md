@@ -51,7 +51,8 @@ Each service has its own unique `.env` file, the structure/contents of which are
 2. Build and start the services using Docker Compose:
    ```sh
    docker compose up
-   docker compose up -d # To start in detached mode
+   docker compose up -d       # To start in detached mode
+   docker compose up --build  # If you've changed anything in the project, you have to rebuild the images
    ```
 
 This will build and start the following services:

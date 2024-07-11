@@ -8,19 +8,16 @@ export class RtpService {
   }
 
   calculateRtp() {
-    if (this.totalBets === 0) {
-      return 0;
-    }
-
-    const rtp = (this.totalWinnings / this.totalBets) * 100;
-    return rtp.toFixed(2);
+    return this.totalBets === 0 // Avoid zero-divison
+      ? 0
+      : (this.totalWinnings / this.totalBets) * 100;
   }
 
-  updateBets(bet: number) {
-    this.totalBets += bet;
+  recordBet(amount: number) {
+    this.totalBets += amount;
   }
 
-  updateWinnings(winning: number) {
-    this.totalWinnings += winning;
+  recordWinning(amount: number) {
+    this.totalWinnings += amount;
   }
 }

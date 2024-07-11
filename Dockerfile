@@ -1,4 +1,3 @@
-# Use an official Node.js runtime as a parent image
 FROM node:lts
 
 # Set the working directory
@@ -13,5 +12,7 @@ RUN npm install -g pnpm && pnpm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 3000 3001 3002 3003
+
+# Define the command to run the app
+CMD ["pnpm", "dev"]

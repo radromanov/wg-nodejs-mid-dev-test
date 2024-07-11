@@ -16,5 +16,3 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 3001
 
-# Define the command to run the app
-CMD ["pnpm", "dev"]
