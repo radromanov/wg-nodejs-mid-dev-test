@@ -33,6 +33,8 @@ export class PlayService {
       symbols.push(randomSymbol);
     }
 
+    console.log(symbols);
+
     return symbols;
   }
 

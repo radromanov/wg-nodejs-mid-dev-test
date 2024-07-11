@@ -32,7 +32,7 @@ export class Application {
     portNum = portNum || this.config.get("port");
 
     return this.app.listen(portNum, () =>
-      console.log(`Wallet Service running on port ${portNum}`)
+      console.log(`RTP Service running on port ${portNum}`)
     );
   }
 }

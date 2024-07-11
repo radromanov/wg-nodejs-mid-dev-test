@@ -5,7 +5,9 @@ export class RtpController {
   constructor(private readonly service: RtpService) {}
 
   handleRtp = async (_req: Request, res: Response) => {
-    res.status(200).json({ rtp: 100 });
+    const rtp = this.service.calculateRtp();
+
+    res.status(200).json({ rtp });
   };
 
   handleUpdateBets = async (req: Request, res: Response) => {
