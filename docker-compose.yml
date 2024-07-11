@@ -8,6 +8,9 @@ services:
       - "3003:3003"
     environment:
       - NODE_ENV=development
+      - GAME_SERVICE_URL=http://container:3001
+      - WALLET_SERVICE_URL=http://container:3002
+      - RTP_SERVICE_URL=http://container:3003
     networks:
       - slot-game-network
     depends_on:
@@ -17,10 +20,12 @@ services:
     build: ./gateway
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=development
     env_file:
       - ./gateway/.env
+    environment:
+      - NODE_ENV=development
+      - GAME_SERVICE_URL=http://container:3001
+      - WALLET_SERVICE_URL=http://container:3002
     networks:
       - slot-game-network
     depends_on:
@@ -32,10 +37,13 @@ services:
     build: ./game
     ports:
       - "3001:3001"
-    environment:
-      - NODE_ENV=development
     env_file:
       - ./game/.env
+    environment:
+      - NODE_ENV=development
+      - GAME_SERVICE_URL=http://container:3001
+      - WALLET_SERVICE_URL=http://container:3002
+      - RTP_SERVICE_URL=http://container:3003
     networks:
       - slot-game-network
 
@@ -43,10 +51,11 @@ services:
     build: ./wallet
     ports:
       - "3002:3002"
-    environment:
-      - NODE_ENV=development
     env_file:
       - ./wallet/.env
+    environment:
+      - NODE_ENV=development
+      - WALLET_SERVICE_URL=http://container:3002
     networks:
       - slot-game-network
 
@@ -54,10 +63,11 @@ services:
     build: ./rtp
     ports:
       - "3003:3003"
-    environment:
-      - NODE_ENV=development
     env_file:
       - ./rtp/.env
+    environment:
+      - NODE_ENV=development
+      - RTP_SERVICE_URL=http://container:3003
     networks:
       - slot-game-network
 
