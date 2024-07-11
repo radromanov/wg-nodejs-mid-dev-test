@@ -1,4 +1,4 @@
-import { Config } from "../lib";
+import { Config } from "./Config";
 
 export class AppError extends Error {
   status: number;

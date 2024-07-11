@@ -3,14 +3,6 @@ services:
     build: .
     ports:
       - "3000:3000"
-      - "3001:3001"
-      - "3002:3002"
-      - "3003:3003"
-    environment:
-      - NODE_ENV=development
-      - GAME_SERVICE_URL=http://container:3001
-      - WALLET_SERVICE_URL=http://container:3002
-      - RTP_SERVICE_URL=http://container:3003
     networks:
       - slot-game-network
     depends_on:
@@ -18,56 +10,43 @@ services:
 
   gateway:
     build: ./gateway
-    ports:
-      - "3000:3000"
     env_file:
       - ./gateway/.env
     environment:
       - NODE_ENV=development
-      - GAME_SERVICE_URL=http://container:3001
+      - GAME_SERVICE_URL=http://container:3001 # Redefining each service's URL due to the Docker Network
       - WALLET_SERVICE_URL=http://container:3002
+      - RTP_SERVICE_URL=http://container:3003
     networks:
       - slot-game-network
-    depends_on:
-      - game
-      - wallet
-      - rtp
 
   game:
     build: ./game
-    ports:
-      - "3001:3001"
     env_file:
       - ./game/.env
     environment:
       - NODE_ENV=development
-      - GAME_SERVICE_URL=http://container:3001
-      - WALLET_SERVICE_URL=http://container:3002
-      - RTP_SERVICE_URL=http://container:3003
+      - GATEWAY_URL=http://container:3000 # Redefining the gateway URL due to the Docker Network
     networks:
       - slot-game-network
 
   wallet:
     build: ./wallet
-    ports:
-      - "3002:3002"
     env_file:
       - ./wallet/.env
     environment:
       - NODE_ENV=development
-      - WALLET_SERVICE_URL=http://container:3002
+      - GATEWAY_URL=http://container:3000 # Redefining the gateway URL due to the Docker Network
     networks:
       - slot-game-network
 
   rtp:
     build: ./rtp
-    ports:
-      - "3003:3003"
     env_file:
       - ./rtp/.env
     environment:
       - NODE_ENV=development
-      - RTP_SERVICE_URL=http://container:3003
+      - GATEWAY_URL=http://container:3000 # Redefining the gateway URL due to the Docker Network
     networks:
       - slot-game-network
 

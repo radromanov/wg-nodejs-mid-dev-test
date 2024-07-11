@@ -1,31 +1,25 @@
+import "@lib/dotenv";
 import { z } from "zod";
-import { HOST_MIN_LENGTH, PORT_MIN_LENGTH, minimum, required } from "../lib";
+import { HOST_MIN_LENGTH } from "@lib/constants";
+import { minimum, required } from "@lib/zod";
+
 import { AppError } from "./AppError";
 
 export class Config {
   private schema = z.object({
-    host: z
-      .string(required("process.env.RTP_SERVICE_HOST"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_HOST", HOST_MIN_LENGTH)
-      ),
     port: z
       .string(required("process.env.RTP_SERVICE_PORT"))
-      .min(
-        PORT_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_PORT", PORT_MIN_LENGTH)
-      )
+      .min(2, minimum("process.env.RTP_SERVICE_PORT", 2))
       .transform((val) => parseInt(val, 10)),
     env: z.enum(
       ["development", "production", "testing", "staging"],
       required("process.env.NODE_ENV")
     ),
-    url: z
-      .string(required("process.env.RTP_SERVICE_URL"))
+    gatewayUrl: z
+      .string(required("process.env.GATEWAY_URL"))
       .min(
         HOST_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_URL", HOST_MIN_LENGTH)
+        minimum("process.env.GATEWAY_URL", HOST_MIN_LENGTH)
       ),
   });
 
@@ -37,10 +31,9 @@ export class Config {
     try {
       // Load .env variables
       const fromEnv = this.schema.parse({
-        host: process.env.RTP_SERVICE_HOST,
         port: process.env.RTP_SERVICE_PORT,
         env: process.env.NODE_ENV,
-        url: process.env.RTP_SERVICE_URL,
+        gatewayUrl: process.env.GATEWAY_URL,
       });
 
       if (key) return fromEnv[key];

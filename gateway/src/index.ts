@@ -1,6 +1,6 @@
+import "module-alias/register";
 import express from "express";
-import { Application } from "./core";
-import { Config } from "./lib";
+import { Application, Config } from "./core";
 
 const expr = express();
 const config = new Config();

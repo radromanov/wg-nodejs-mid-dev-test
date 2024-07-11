@@ -2,17 +2,17 @@ import axios from "axios";
 import { Config } from "@core/Config";
 
 const config = new Config();
-const { walletServiceUrl, rtpServiceUrl } = config.get();
+const gateway = config.get("gatewayUrl");
 
 export const walletApi = axios.create({
-  baseURL: walletServiceUrl,
+  baseURL: gateway,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export const rtpApi = axios.create({
-  baseURL: rtpServiceUrl,
+  baseURL: gateway,
   headers: {
     "Content-Type": "application/json",
   },

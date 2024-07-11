@@ -1,4 +1,4 @@
-import { Config } from "../../src/lib";
+import { Config } from "@core/Config";
 
 // Mock the environment variables
 const mockEnv = (env: NodeJS.ProcessEnv) => {
@@ -35,7 +35,6 @@ describe("Config Class", () => {
     });
 
     const config = new Config();
-    expect(config.get("host")).toBe("localhost");
     expect(config.get("port")).toBe(3000);
     expect(config.get("env")).toBe("development");
   });

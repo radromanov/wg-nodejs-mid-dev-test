@@ -1,6 +1,7 @@
 import { Express, json, urlencoded } from "express";
 import axios from "axios";
-import { Config, globalError } from "../lib";
+import { Config } from "./Config";
+import { globalError } from "../lib";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -12,7 +13,8 @@ export class Application {
 
   endpoints() {
     this.setup();
-    const { gameServiceUrl, walletServiceUrl } = this.config.get();
+    const { gameServiceUrl, walletServiceUrl, rtpServiceUrl } =
+      this.config.get();
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app
@@ -79,6 +81,41 @@ export class Application {
           res
             .status(response.status)
             .json({ currentBalance: response.data.currentBalance });
+        } catch (error) {
+          next(error);
+        }
+      })
+      .get("/rtp", async (_req, res, next) => {
+        try {
+          const response = await axios.get<{ rtp: number }>(
+            `${rtpServiceUrl}/rtp`
+          );
+
+          res.status(response.status).json({ rtp: response.data.rtp });
+        } catch (error) {
+          next(error);
+        }
+      })
+      .post("/rtp/bets", async (req, res, next) => {
+        try {
+          const response = await axios.post(
+            `${rtpServiceUrl}/rtp/bets`,
+            req.body
+          );
+
+          res.sendStatus(response.status);
+        } catch (error) {
+          next(error);
+        }
+      })
+      .post("/rtp/winnings", async (req, res, next) => {
+        try {
+          const response = await axios.post(
+            `${rtpServiceUrl}/rtp/winnings`,
+            req.body
+          );
+
+          res.sendStatus(response.status);
         } catch (error) {
           next(error);
         }

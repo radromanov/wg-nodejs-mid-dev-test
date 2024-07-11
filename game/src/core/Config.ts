@@ -1,73 +1,25 @@
 import "@lib/dotenv";
 import { z } from "zod";
-import { HOST_MIN_LENGTH, PORT_MIN_LENGTH } from "@lib/constants";
+import { HOST_MIN_LENGTH } from "@lib/constants";
 import { minimum, required } from "@lib/zod";
 
 import { AppError } from "./AppError";
 
 export class Config {
   private schema = z.object({
-    host: z
-      .string(required("process.env.GAME_SERVICE_HOST"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_HOST", HOST_MIN_LENGTH)
-      ),
     port: z
       .string(required("process.env.GAME_SERVICE_PORT"))
-      .min(
-        PORT_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_PORT", PORT_MIN_LENGTH)
-      )
+      .min(2, minimum("process.env.GAME_SERVICE_PORT", 2))
       .transform((val) => parseInt(val, 10)),
     env: z.enum(
       ["development", "production", "testing", "staging"],
       required("process.env.NODE_ENV")
     ),
-    url: z
-      .string(required("process.env.GAME_SERVICE_URL"))
+    gatewayUrl: z
+      .string(required("process.env.GATEWAY_URL"))
       .min(
         HOST_MIN_LENGTH,
-        minimum("process.env.GAME_SERVICE_URL", HOST_MIN_LENGTH)
-      ),
-
-    walletServiceHost: z
-      .string(required("process.env.WALLET_SERVICE_HOST"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_HOST", HOST_MIN_LENGTH)
-      ),
-    walletServicePort: z
-      .string(required("process.env.WALLET_SERVICE_PORT"))
-      .min(
-        PORT_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_PORT", PORT_MIN_LENGTH)
-      )
-      .transform((val) => parseInt(val, 10)),
-    walletServiceUrl: z
-      .string(required("process.env.WALLET_SERVICE_URL"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.WALLET_SERVICE_URL", HOST_MIN_LENGTH)
-      ),
-    rtpServiceHost: z
-      .string(required("process.env.RTP_SERVICE_HOST"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_HOST", HOST_MIN_LENGTH)
-      ),
-    rtpServicePort: z
-      .string(required("process.env.RTP_SERVICE_PORT"))
-      .min(
-        PORT_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_PORT", PORT_MIN_LENGTH)
-      )
-      .transform((val) => parseInt(val, 10)),
-    rtpServiceUrl: z
-      .string(required("process.env.RTP_SERVICE_URL"))
-      .min(
-        HOST_MIN_LENGTH,
-        minimum("process.env.RTP_SERVICE_URL", HOST_MIN_LENGTH)
+        minimum("process.env.GATEWAY_URL", HOST_MIN_LENGTH)
       ),
   });
 
@@ -79,16 +31,9 @@ export class Config {
     try {
       // Load .env variables
       const fromEnv = this.schema.parse({
-        host: process.env.GAME_SERVICE_HOST,
         port: process.env.GAME_SERVICE_PORT,
         env: process.env.NODE_ENV,
-        url: process.env.GAME_SERVICE_URL,
-        walletServiceHost: process.env.WALLET_SERVICE_HOST,
-        walletServicePort: process.env.WALLET_SERVICE_PORT,
-        walletServiceUrl: process.env.WALLET_SERVICE_URL,
-        rtpServiceHost: process.env.RTP_SERVICE_HOST,
-        rtpServicePort: process.env.RTP_SERVICE_PORT,
-        rtpServiceUrl: process.env.RTP_SERVICE_URL,
+        gatewayUrl: process.env.GATEWAY_URL,
       });
 
       if (key) return fromEnv[key];
