@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "@api/app";
-import { ROUTES } from "@lib/constants";
+import { ROUTES, SLOT_COLS, SLOT_ROWS } from "@lib/constants";
 
 describe(ROUTES.PLAY, () => {
   const endpoints = app.endpoints();
@@ -48,9 +48,17 @@ describe(ROUTES.PLAY, () => {
       const response = await request(endpoints).post(ROUTES.PLAY).send({ bet });
 
       expect(response.status).toBe(200);
+
+      expect(response.body).toHaveProperty("winnings");
+      expect(typeof response.body.winnings === "number").toBeTruthy();
+
       expect(response.body).toHaveProperty("matrix");
       expect(Array.isArray(response.body.matrix)).toBeTruthy();
-      expect(response.body).toHaveProperty("winnings");
+
+      expect(response.body.matrix.length).toBe(SLOT_COLS);
+      response.body.matrix.forEach((row: string[]) =>
+        expect(row.length).toBe(SLOT_ROWS)
+      );
     });
   });
 });
