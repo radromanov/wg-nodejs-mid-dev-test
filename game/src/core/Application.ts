@@ -30,7 +30,7 @@ export class Application {
       walletService,
       rtpService
     );
-    const playModule = new PlayModule(playController);
+    const playModule = new PlayModule(playController, this.config);
 
     const simService = new SimService(playService);
     const simController = new SimController(
