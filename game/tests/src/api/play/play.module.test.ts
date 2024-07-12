@@ -9,14 +9,14 @@ describe(ROUTES.PLAY, () => {
     const invalidMethods = ["get", "put", "patch", "delete"] as const;
 
     invalidMethods.forEach((method) => {
-      it(`should return 405 for ${method.toUpperCase()} method`, async () => {
+      it(`should respond with 405 for ${method.toUpperCase()} method`, async () => {
         await request(endpoints)[method](ROUTES.PLAY).expect(405);
       });
     });
   });
 
   describe("OPTIONS /", () => {
-    it("should return 204 and allow POST and OPTIONS methods", async () => {
+    it("should respond with 204 and allow POST and OPTIONS methods", async () => {
       const response = await request(endpoints).options(ROUTES.PLAY);
       expect(response.status).toBe(204);
 
@@ -34,17 +34,17 @@ describe(ROUTES.PLAY, () => {
       return await request(endpoints).post(ROUTES.PLAY).send(payload);
     };
 
-    it("should return 400 if 'bet' is invalid", async () => {
+    it("should respond with 400 if 'bet' is invalid", async () => {
       const response = await postPlay({ bet: "123" });
       expect(response.status).toBe(400);
     });
 
-    it("should return 400 if 'bet' is missing", async () => {
+    it("should respond with 400 if 'bet' is missing", async () => {
       const response = await postPlay({});
       expect(response.status).toBe(400);
     });
 
-    it("should return 200 and the correct response body for valid 'bet'", async () => {
+    it("should respond with 200 and the correct response body for valid 'bet'", async () => {
       const response = await postPlay({ bet });
 
       expect(response.status).toBe(200);
