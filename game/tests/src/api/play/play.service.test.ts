@@ -3,10 +3,14 @@ import { SLOT_COLS, SLOT_ROWS, TOTAL_SLOTS } from "@lib/constants";
 
 describe("Play Service", () => {
   let playService: PlayService;
+  let symbols: string[];
+  let result: { matrix: string[][]; winnings: number };
   const bet = 100;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     playService = new PlayService();
+    symbols = playService.spin();
+    result = await playService.play(bet, symbols);
   });
 
   it("should contain methods", () => {
@@ -14,24 +18,17 @@ describe("Play Service", () => {
     expect(playService).toHaveProperty("spin");
   });
 
-  it("should return an array of symbols", () => {
-    const symbols = playService.spin();
-
+  it("should be an array symbols", () => {
     expect(Array.isArray(symbols)).toBeTruthy();
     expect(symbols.length).toBe(TOTAL_SLOTS);
   });
 
-  it("should return a matrix and winnings", async () => {
-    const symbols = playService.spin();
-    const result = await playService.play(bet, symbols);
-
+  it("should contain matrix and winnings in the correct format", async () => {
     expect(result).toHaveProperty("matrix");
     expect(result).toHaveProperty("winnings");
-  });
 
-  it("should return matrix in the correct format", async () => {
-    const symbols = playService.spin();
-    const result = await playService.play(bet, symbols);
+    expect(Array.isArray(result.matrix)).toBeTruthy();
+    expect(typeof result.winnings === "number").toBeTruthy();
 
     expect(result.matrix.length).toBe(SLOT_COLS);
     result.matrix.forEach((column) => {
