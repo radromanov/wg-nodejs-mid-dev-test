@@ -16,39 +16,48 @@ describe(ROUTES.PLAY, () => {
   });
 
   describe("POST /", () => {
-    const bet = 100;
     const postPlay = async (payload: object) =>
       await request(endpoints).post(ROUTES.PLAY).send(payload);
 
     describe("Invalid Inputs", () => {
       const invalidBets: { bet: any; description: string }[] = [
-        { bet: "123", description: "invalid" },
-        { bet: -123, description: "negative" },
-        { bet: undefined, description: "missing" },
+        { bet: "123", description: "'bet' is a string" },
+        { bet: -123, description: "'bet' is a negative integer" },
+        { bet: -123.5, description: "'bet' is a negative decimal" },
+        { bet: true, description: "'bet' is a boolean" },
+        { bet: {}, description: "'bet' is an object" },
+        { bet: undefined, description: "'bet' is missing" },
       ];
 
       invalidBets.forEach(({ bet, description }) => {
-        it(`should respond with 400 if 'bet' is ${description}`, async () => {
+        it(`should respond with 400 if ${description}`, async () => {
           await request(endpoints).post(ROUTES.PLAY).send({ bet }).expect(400);
         });
       });
     });
 
     describe("Valid Inputs", () => {
-      it("should respond with 200 and the correct response body for valid 'bet'", async () => {
-        const response = await postPlay({ bet });
+      const validBets: { bet: any; description: string }[] = [
+        { bet: 100, description: "'bet' is a positive integer" },
+        { bet: 100.5, description: "'bet' is a positive decimal" },
+      ];
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty("winnings");
-        expect(typeof response.body.winnings).toBe("number");
+      validBets.forEach(({ bet, description }) => {
+        it(`should respond with 200 if ${description} and return matrix and winnings in the correct format`, async () => {
+          const response = await postPlay({ bet });
 
-        expect(response.body).toHaveProperty("matrix");
-        expect(Array.isArray(response.body.matrix)).toBe(true);
+          expect(response.status).toBe(200);
+          expect(response.body).toHaveProperty("winnings");
+          expect(typeof response.body.winnings).toBe("number");
 
-        expect(response.body.matrix.length).toBe(SLOT_COLS);
-        response.body.matrix.forEach((row: string[]) =>
-          expect(row.length).toBe(SLOT_ROWS)
-        );
+          expect(response.body).toHaveProperty("matrix");
+          expect(Array.isArray(response.body.matrix)).toBe(true);
+
+          expect(response.body.matrix.length).toBe(SLOT_COLS);
+          response.body.matrix.forEach((row: string[]) =>
+            expect(row.length).toBe(SLOT_ROWS)
+          );
+        });
       });
     });
   });
