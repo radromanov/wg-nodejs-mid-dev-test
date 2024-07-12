@@ -35,8 +35,7 @@ describe(ROUTES.WALLET, () => {
 
     describe("OPTIONS /", () => {
       it("should respond with 204 and allow POST and OPTIONS methods", async () => {
-        const response = await request(endpoints).options(endpoint);
-        expect(response.status).toBe(204);
+        const response = await request(endpoints).options(endpoint).expect(204);
 
         const allowedMethods = response.headers["access-control-allow-methods"];
         expect(allowedMethods).toContain("GET");

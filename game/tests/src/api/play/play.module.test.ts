@@ -30,18 +30,19 @@ describe(ROUTES.PLAY, () => {
     const bet = 100;
 
     // Helper function to avoid repetition
-    const postPlay = async (payload: object) => {
-      return await request(endpoints).post(ROUTES.PLAY).send(payload);
-    };
+    const postPlay = async (payload: object) =>
+      await request(endpoints).post(ROUTES.PLAY).send(payload);
 
-    it("should respond with 400 if 'bet' is invalid", async () => {
-      const response = await postPlay({ bet: "123" });
-      expect(response.status).toBe(400);
-    });
+    const invalidBets: { bet: any; description: string }[] = [
+      { bet: "123", description: "invalid" },
+      { bet: -123, description: "negative" },
+      { bet: undefined, description: "missing" },
+    ];
 
-    it("should respond with 400 if 'bet' is missing", async () => {
-      const response = await postPlay({});
-      expect(response.status).toBe(400);
+    invalidBets.forEach(({ bet, description }) => {
+      it(`should respond with 400 if 'bet' is ${description}`, async () => {
+        await request(endpoints).post(ROUTES.PLAY).send({ bet }).expect(400);
+      });
     });
 
     it("should respond with 200 and the correct response body for valid 'bet'", async () => {
