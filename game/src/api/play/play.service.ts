@@ -19,42 +19,19 @@ export class PlayService {
   }
 
   spin() {
-    // Perform a random spin on the matrix
-    const symbols: string[] = [];
-
-    for (let i = 0; i < this.matrix.length; i++) {
-      const currentSymbolSet = this.matrix[i];
-
-      const randomIndex = rand(currentSymbolSet.length);
-      const randomSymbol = currentSymbolSet[randomIndex];
-
-      symbols.push(randomSymbol);
-    }
-
-    return symbols;
+    return this.matrix.map((column) => column[rand(column.length)]);
   }
 
   private calculateWinnings(symbols: string[], bet: number) {
-    const winnings = allEqual(symbols) ? bet * BET_MULTIPLIER : 0;
-    return winnings;
+    return allEqual(symbols) ? bet * BET_MULTIPLIER : 0;
   }
 
   private generateMatrix() {
-    const matrix: string[][] = [];
-    for (let i = 0; i < SLOT_COLS; i++) {
-      const rows: string[] = [];
-
-      for (let j = 0; j < SLOT_ROWS; j++) {
-        // Can use an external library such as Random JS
-        // We are using the native JavaScript way of generating pseudo-random values
-        const randomIndex = rand(SLOT_SYMBOLS.length);
-        const randomSymbol = SLOT_SYMBOLS[randomIndex];
-        rows.push(randomSymbol);
-      }
-
-      matrix.push(rows);
-    }
-
-    return matrix;
+    return Array.from({ length: SLOT_COLS }, () =>
+      Array.from(
+        { length: SLOT_ROWS },
+        () => SLOT_SYMBOLS[rand(SLOT_SYMBOLS.length)]
+      )
+    );
   }
 }
