@@ -13,6 +13,20 @@ describe("/play", () => {
   // });
 
   describe("POST /", () => {
+    it("should return a 400 if invalid 'bet' sent", async () => {
+      const response = await request(endpoints)
+        .post("/play")
+        .send({ bet: "123" });
+
+      expect(response.status).toBe(400);
+    });
+
+    it("should return a 400 if no 'bet' sent", async () => {
+      const response = await request(endpoints).post("/play").send();
+
+      expect(response.status).toBe(400);
+    });
+
     it("should return 200 and the correct response body", async () => {
       const response = await request(endpoints).post("/play").send({ bet });
 
@@ -20,14 +34,6 @@ describe("/play", () => {
       expect(response.body).toHaveProperty("matrix");
       expect(Array.isArray(response.body.matrix)).toBeTruthy();
       expect(response.body).toHaveProperty("winnings");
-    });
-
-    it("should return a 400", async () => {
-      const response = await request(endpoints)
-        .post("/play")
-        .send({ bets: bet });
-
-      expect(response.status).toBe(400);
     });
   });
 });
