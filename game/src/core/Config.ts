@@ -1,5 +1,5 @@
 import "@lib/dotenv";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { HOST_MIN_LENGTH } from "@lib/constants";
 import { minimum, required } from "@lib/zod";
 
@@ -39,9 +39,13 @@ export class Config {
       if (key) return fromEnv[key];
       else return fromEnv;
     } catch (error) {
-      throw AppError.InternalServerError(
-        "Internal Server Error - could not initialize Game Service."
-      );
+      if (error instanceof ZodError) {
+        throw AppError.InternalServerError(error.errors[0].message);
+      } else {
+        throw AppError.InternalServerError(
+          "Error initializing Game Service. Please check your '.env' file for missing environment variables."
+        );
+      }
     }
   }
 }
