@@ -1,15 +1,14 @@
 import z from "zod";
-import { errors, minimum } from "@lib/zod";
+import { errors } from "@lib/zod";
 
 export const SimInput = z.object({
   body: z.object({
     count: z
       .number(errors("Count", "Number"))
-      .min(1, minimum("Count"))
-      .positive("Count must be a positive number"),
+      .positive("Count must be a positive integer")
+      .int("Count must be a positive integer"),
     bet: z
       .number(errors("Bet", "Number"))
-      .min(1, minimum("Bet"))
       .positive("Bet must be a positive number"),
   }),
 });
