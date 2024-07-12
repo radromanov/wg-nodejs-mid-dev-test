@@ -5,7 +5,7 @@ export class WalletService {
 
   async deposit(amount: number) {
     try {
-      await this.walletApi.post("/wallet/deposit", { amount });
+      return await this.walletApi.post("/wallet/deposit", { amount });
     } catch (error) {
       throw error;
     }
@@ -13,7 +13,9 @@ export class WalletService {
 
   async withdraw(amount: number) {
     try {
-      await this.walletApi.post("/wallet/withdraw", { amount });
+      return await this.walletApi.post("/wallet/withdraw", {
+        amount,
+      });
     } catch (error) {
       throw error;
     }
