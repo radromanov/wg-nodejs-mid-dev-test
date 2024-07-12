@@ -19,7 +19,7 @@ export class PlayModule {
       catcher(this.controller.handlePlay)
     );
 
-    this._router.options("/", handleOptions);
+    this._router.options("/", handleOptions(["POST", "OPTIONS"]));
     this._router.get("/", handleNotImplemented);
     this._router.put("/", handleNotImplemented);
     this._router.patch("/", handleNotImplemented);

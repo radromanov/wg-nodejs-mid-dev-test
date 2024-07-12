@@ -7,6 +7,28 @@ import { ROUTES } from "@lib/constants";
 describe(ROUTES.SIM, () => {
   const endpoints = app.endpoints();
 
+  it("should return a 405 for non-implemented methods", async () => {
+    await request(endpoints).get(ROUTES.SIM).expect(405);
+    await request(endpoints).put(ROUTES.SIM).expect(405);
+    await request(endpoints).patch(ROUTES.SIM).expect(405);
+    await request(endpoints).delete(ROUTES.SIM).expect(405);
+  });
+
+  describe("OPTIONS /", () => {
+    it("should return a 204", async () => {
+      const response = await request(endpoints).options(ROUTES.SIM);
+      expect(response.status).toBe(204);
+    });
+
+    it("should allow POST and OPTIONS methods", async () => {
+      const response = await request(endpoints).options(ROUTES.SIM);
+      const allowedMethods = response.headers["access-control-allow-methods"];
+
+      expect(allowedMethods).toContain("POST");
+      expect(allowedMethods).toContain("OPTIONS");
+    });
+  });
+
   describe("POST /", () => {
     const bet = 100;
     const count = 3;

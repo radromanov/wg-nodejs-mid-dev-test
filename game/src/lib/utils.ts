@@ -26,17 +26,15 @@ export function handleNotImplemented(
   );
 }
 
-export function handleOptions(
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) {
-  const config = new Config();
-  const gatewayUrl = config.get("gatewayUrl");
+export const handleOptions =
+  (methods: string[]) =>
+  (_req: Request, res: Response, _next: NextFunction) => {
+    const config = new Config();
+    const gatewayUrl = config.get("gatewayUrl");
 
-  res.header("Access-Control-Allow-Methods", "POST,OPTIONS");
-  res.header("Access-Control-Allow-Origin", gatewayUrl);
-  res.header("Accept", "application/json");
+    res.header("Access-Control-Allow-Methods", methods.join(","));
+    res.header("Access-Control-Allow-Origin", gatewayUrl);
+    res.header("Accept", "application/json");
 
-  res.sendStatus(204);
-}
+    res.sendStatus(204);
+  };
