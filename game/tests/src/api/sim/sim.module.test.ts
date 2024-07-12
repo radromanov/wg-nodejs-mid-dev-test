@@ -44,26 +44,51 @@ describe(ROUTES.SIM, () => {
     const sendPostRequest = (payload: object) =>
       request(endpoints).post(ROUTES.SIM).send(payload);
 
-    it("should respond with 400 for invalid 'bet' property", async () => {
-      await sendPostRequest({ bet: "100", count }).expect(400);
+    describe("Invalid Inputs", () => {
+      const invalidInputs: { bet: any; count: any; description: string }[] = [
+        { bet: "123", count: 3, description: "'bet' is a string" },
+        { bet: -123, count: 3, description: "'bet' is a negative integer" },
+        { bet: -123.5, count: 3, description: "'bet' is a negative decimal" },
+        { bet: true, count: 3, description: "'bet' is a boolean" },
+        { bet: {}, count: 3, description: "'bet' is an object" },
+        { bet: undefined, count: 3, description: "'bet' is missing" },
+        { bet: 123, count: "3", description: "'count' is a string" },
+        { bet: 123, count: -3, description: "'count' is a negative integer" },
+        { bet: 123, count: -3.5, description: "'count' is a negative decimal" },
+        { bet: 123, count: true, description: "'count' is a boolean" },
+        { bet: 123, count: {}, description: "'count' is an object" },
+        { bet: 123, count: undefined, description: "'count' is missing" },
+      ];
+
+      invalidInputs.forEach(({ bet, description }) => {
+        it(`should respond with 400 if ${description}`, async () => {
+          await request(endpoints).post(ROUTES.SIM).send({ bet }).expect(400);
+        });
+      });
     });
 
-    it("should respond with 400 for missing 'bet' property", async () => {
-      await sendPostRequest({ count }).expect(400);
-    });
+    describe("Valid Inputs", () => {
+      const validInputs: { bet: any; count: any; description: string }[] = [
+        {
+          bet: 100,
+          count: 3,
+          description: "'bet' and 'count' are positive integers'",
+        },
+        {
+          bet: 100.5,
+          count: 3,
+          description:
+            "'bet' is a positive decimal and 'count' is a positive integer'",
+        },
+      ];
 
-    it("should respond with 400 for invalid 'count' property", async () => {
-      await sendPostRequest({ bet, count: "3" }).expect(400);
-    });
-
-    it("should respond with 400 for missing 'count' property", async () => {
-      await sendPostRequest({ bet }).expect(400);
-    });
-
-    it("should respond with 200 and the correct response body for valid request", async () => {
-      const response = await sendPostRequest({ count, bet }).expect(200);
-      expect(response.body).toHaveProperty("totalWinnings");
-      expect(response.body).toHaveProperty("netResult");
+      validInputs.forEach(({ bet, count, description }) => {
+        it(`should respond with 200 if ${description} and return the correct response body`, async () => {
+          const response = await sendPostRequest({ count, bet }).expect(200);
+          expect(response.body).toHaveProperty("totalWinnings");
+          expect(response.body).toHaveProperty("netResult");
+        });
+      });
     });
   });
 });
