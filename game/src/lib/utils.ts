@@ -1,4 +1,5 @@
 import { AppError } from "@core/AppError";
+import { Config } from "@core/Config";
 import { Request, Response, NextFunction } from "express";
 
 export function rand(upper?: number) {
@@ -23,4 +24,19 @@ export function handleNotImplemented(
       `${req.method} method on ${req.path} is not implemented.`
     )
   );
+}
+
+export function handleOptions(
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) {
+  const config = new Config();
+  const gatewayUrl = config.get("gatewayUrl");
+
+  res.header("Access-Control-Allow-Methods", "POST,OPTIONS");
+  res.header("Access-Control-Allow-Origin", gatewayUrl);
+  res.header("Accept", "application/json");
+
+  res.sendStatus(204);
 }

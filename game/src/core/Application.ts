@@ -1,14 +1,12 @@
 import { Express, json, urlencoded } from "express";
-
 import { globalError } from "@lib/middlewares";
-
 import { Config } from "@core/Config";
-
 import { PlayController, PlayModule, PlayService } from "@api/play";
 import { SimController, SimModule, SimService } from "@api/sim";
 import { WalletService } from "@api/wallet";
 import { rtpApi, walletApi } from "@lib/axios";
 import { RtpService } from "@api/rtp";
+import { ROUTES } from "@lib/constants";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -30,7 +28,7 @@ export class Application {
       walletService,
       rtpService
     );
-    const playModule = new PlayModule(playController, this.config);
+    const playModule = new PlayModule(playController);
 
     const simService = new SimService(playService);
     const simController = new SimController(
@@ -41,8 +39,8 @@ export class Application {
     const simModule = new SimModule(simController);
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
-    this.app.use("/play", playModule.router);
-    this.app.use("/sim", simModule.router);
+    this.app.use(ROUTES.PLAY, playModule.router);
+    this.app.use(ROUTES.SIM, simModule.router);
 
     this.app.use(globalError);
 

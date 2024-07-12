@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "@api/app";
 import { ROUTES } from "@lib/constants";
 
-describe("/play", () => {
+describe(ROUTES.PLAY, () => {
   const endpoints = app.endpoints();
 
   it("should return 405 for non-implemented methods", async () => {
