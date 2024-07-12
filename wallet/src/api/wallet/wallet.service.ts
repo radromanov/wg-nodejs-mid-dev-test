@@ -9,10 +9,17 @@ export class WalletService {
   }
 
   deposit(amount: number) {
+    if (amount <= 0) {
+      throw AppError.BadRequest("Amount must be a positive number");
+    }
+
     this.wallet += amount;
   }
 
   withdraw(amount: number) {
+    if (amount <= 0) {
+      throw AppError.BadRequest("Amount must be a positive number");
+    }
     if (amount > this.wallet) {
       throw AppError.BadRequest(
         `You do not have sufficient funds to withdraw ${amount}`

@@ -19,7 +19,7 @@ export class WalletModule {
       .post(
         ROUTES.DEPOSIT,
         validate(WalletInput),
-        this.controller.handleDeposit
+        catcher(this.controller.handleDeposit)
       )
       .options(ROUTES.DEPOSIT, handleOptions(["POST", "OPTIONS"]))
       .get(ROUTES.DEPOSIT, handleNotImplemented)

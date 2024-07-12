@@ -14,34 +14,20 @@ describe("Play Schema Validation", () => {
   });
 
   describe("Invalid Inputs", () => {
-    it("should fail to parse when bet is a string representing an integer", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: "100" } });
-      expect(invalid.success).toBe(false);
-    });
+    const invalidInputs = [
+      { bet: "100", description: "a string representing an integer" },
+      { bet: "100.5", description: "a string representing a decimal" },
+      { bet: true, description: "a boolean" },
+      { bet: "true", description: "a string 'boolean'" },
+      { bet: -100, description: "negative" },
+      { bet: "-100", description: "a negative string" },
+    ];
 
-    it("should fail to parse when bet is a string representing a decimal", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: "100.5" } });
-      expect(invalid.success).toBe(false);
-    });
-
-    it("should fail to parse when bet is a boolean", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: true } });
-      expect(invalid.success).toBe(false);
-    });
-
-    it("should fail to parse when bet is a string 'true'", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: "true" } });
-      expect(invalid.success).toBe(false);
-    });
-
-    it("should fail to parse when bet is negative", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: -10 } });
-      expect(invalid.success).toBe(false);
-    });
-
-    it("should fail to parse when bet is a negative string", () => {
-      const invalid = PlayInput.safeParse({ body: { bet: "-10" } });
-      expect(invalid.success).toBe(false);
-    });
+    invalidInputs.forEach(({ bet, description }) =>
+      it(`should fail to parse when bet is ${description}`, () => {
+        const invalid = PlayInput.safeParse({ body: { bet } });
+        expect(invalid.success).toBe(false);
+      })
+    );
   });
 });
