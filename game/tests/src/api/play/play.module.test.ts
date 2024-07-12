@@ -15,6 +15,44 @@ describe(ROUTES.PLAY, () => {
     });
   });
 
+  describe("POST /", () => {
+    const bet = 100;
+    const postPlay = async (payload: object) =>
+      await request(endpoints).post(ROUTES.PLAY).send(payload);
+
+    describe("Invalid Inputs", () => {
+      const invalidBets: { bet: any; description: string }[] = [
+        { bet: "123", description: "invalid" },
+        { bet: -123, description: "negative" },
+        { bet: undefined, description: "missing" },
+      ];
+
+      invalidBets.forEach(({ bet, description }) => {
+        it(`should respond with 400 if 'bet' is ${description}`, async () => {
+          await request(endpoints).post(ROUTES.PLAY).send({ bet }).expect(400);
+        });
+      });
+    });
+
+    describe("Valid Inputs", () => {
+      it("should respond with 200 and the correct response body for valid 'bet'", async () => {
+        const response = await postPlay({ bet });
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("winnings");
+        expect(typeof response.body.winnings).toBe("number");
+
+        expect(response.body).toHaveProperty("matrix");
+        expect(Array.isArray(response.body.matrix)).toBe(true);
+
+        expect(response.body.matrix.length).toBe(SLOT_COLS);
+        response.body.matrix.forEach((row: string[]) =>
+          expect(row.length).toBe(SLOT_ROWS)
+        );
+      });
+    });
+  });
+
   describe("OPTIONS /", () => {
     it("should respond with 204 and allow POST and OPTIONS methods", async () => {
       const response = await request(endpoints).options(ROUTES.PLAY);
@@ -23,42 +61,6 @@ describe(ROUTES.PLAY, () => {
       const allowedMethods = response.headers["access-control-allow-methods"];
       expect(allowedMethods).toContain("POST");
       expect(allowedMethods).toContain("OPTIONS");
-    });
-  });
-
-  describe("POST /", () => {
-    const bet = 100;
-
-    // Helper function to avoid repetition
-    const postPlay = async (payload: object) =>
-      await request(endpoints).post(ROUTES.PLAY).send(payload);
-
-    const invalidBets: { bet: any; description: string }[] = [
-      { bet: "123", description: "invalid" },
-      { bet: -123, description: "negative" },
-      { bet: undefined, description: "missing" },
-    ];
-
-    invalidBets.forEach(({ bet, description }) => {
-      it(`should respond with 400 if 'bet' is ${description}`, async () => {
-        await request(endpoints).post(ROUTES.PLAY).send({ bet }).expect(400);
-      });
-    });
-
-    it("should respond with 200 and the correct response body for valid 'bet'", async () => {
-      const response = await postPlay({ bet });
-
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty("winnings");
-      expect(typeof response.body.winnings).toBe("number");
-
-      expect(response.body).toHaveProperty("matrix");
-      expect(Array.isArray(response.body.matrix)).toBe(true);
-
-      expect(response.body.matrix.length).toBe(SLOT_COLS);
-      response.body.matrix.forEach((row: string[]) =>
-        expect(row.length).toBe(SLOT_ROWS)
-      );
     });
   });
 });
