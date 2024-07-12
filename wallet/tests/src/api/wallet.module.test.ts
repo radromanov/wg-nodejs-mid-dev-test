@@ -62,16 +62,42 @@ describe(ROUTES.WALLET, () => {
         starterBalance = await getCurrentBalance();
       });
 
-      it("should deposit funds to the player's wallet and respond with 200", async () => {
-        let depositAmount = 1000;
+      describe("Invalid Inputs", () => {
+        const invalidDepositAmounts = [
+          { amount: -1000, description: "'amount' is a negative integer" },
+          { amount: -1000.5, description: "'amount' is a negative decimal" },
+          { amount: "1000", description: "'amount' is a string" },
+          { amount: true, description: "'amount' is a boolean" },
+          { amount: {}, description: "'amount' is an object" },
+          { amount: undefined, description: "'amount' is missing" },
+        ];
 
-        await request(endpoints)
-          .post(endpoint)
-          .send({ amount: depositAmount })
-          .expect(200);
+        invalidDepositAmounts.forEach(({ amount, description }) => {
+          it(`should respond with 400 if ${description}`, async () =>
+            await request(endpoints)
+              .post(endpoint)
+              .send({ amount })
+              .expect(400));
+        });
+      });
 
-        const currentBalance = await getCurrentBalance();
-        expect(currentBalance).toBe(starterBalance + depositAmount);
+      describe("Valid Inputs", () => {
+        const validDepositAmounts = [
+          { amount: 100, description: "'amount' is a positive integer" },
+          { amount: 100.5, description: "'amount' is a positive decimal" },
+        ];
+
+        validDepositAmounts.forEach(({ amount, description }) => {
+          it(`should respond with 200 if ${description} and deposit funds to the player's wallet`, async () => {
+            await request(endpoints)
+              .post(endpoint)
+              .send({ amount })
+              .expect(200);
+            const currentBalance = await getCurrentBalance();
+
+            expect(currentBalance).toBe(starterBalance + amount);
+          });
+        });
       });
     });
 
@@ -108,14 +134,16 @@ describe(ROUTES.WALLET, () => {
 
       describe("Invalid Inputs", () => {
         const invalidWithdrawAmounts = [
-          { amount: -1000, description: "negative withdraw amount" },
-          { amount: "1000", description: "string withdraw amount" },
-          { amount: true, description: "boolean withdraw amount" },
-          { amount: undefined, description: "missing withdraw amount" },
+          { amount: -1000, description: "'amount' is a negative integer" },
+          { amount: -1000.5, description: "'amount' is a negative decimal" },
+          { amount: "1000", description: "'amount' is a string" },
+          { amount: true, description: "'amount' is a boolean" },
+          { amount: {}, description: "'amount' is an object" },
+          { amount: undefined, description: "'amount' is missing" },
         ];
 
         invalidWithdrawAmounts.forEach(({ amount, description }) => {
-          it(`should reject ${description} and respond with 400`, async () =>
+          it(`should respond with 400 if ${description}`, async () =>
             await request(endpoints)
               .post(endpoint)
               .send({ amount })
@@ -130,11 +158,15 @@ describe(ROUTES.WALLET, () => {
         ];
 
         validWithdrawAmounts.forEach(({ amount, description }) => {
-          it(`should respond with 200 if ${description} `, async () =>
+          it(`should respond with 200 if ${description} and withdraw funds from the player's wallet`, async () => {
             await request(endpoints)
               .post(endpoint)
               .send({ amount })
-              .expect(200));
+              .expect(200);
+
+            const currentBalance = await getCurrentBalance();
+            expect(currentBalance).toBe(starterBalance - amount);
+          });
         });
       });
     });
