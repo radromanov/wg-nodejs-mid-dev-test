@@ -1,13 +1,14 @@
+import _random from "lodash/random";
 import { AppError } from "@core/AppError";
 import { Config } from "@core/Config";
 import { Request, Response, NextFunction } from "express";
 
-export function rand(upper?: number) {
+export function rand(lower: number = 0, upper?: number) {
   if (upper) {
-    return Math.floor(Math.random() * upper);
+    return _random(lower, upper - 1); // lodash's random is inclusive of the upper bound
   }
 
-  return Math.floor(Math.random());
+  return _random(lower);
 }
 
 export function allEqual<T>(arr: T[]) {
