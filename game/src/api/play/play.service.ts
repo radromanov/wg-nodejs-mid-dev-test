@@ -13,16 +13,12 @@ export class PlayService {
     this.matrix = this.generateMatrix();
   }
 
-  async play(bet: number) {
-    // const symbols = this.spin();
-    // 50% chance to win
-    const symbols = Math.random() > 0.5 ? ["A", "A", "A"] : this.spin();
+  async play(bet: number, symbols: string[]) {
     const winnings = this.calculateWinnings(symbols, bet);
-
     return { matrix: this.matrix, winnings };
   }
 
-  private spin() {
+  spin() {
     // Perform a random spin on the matrix
     const symbols: string[] = [];
 
@@ -34,8 +30,6 @@ export class PlayService {
 
       symbols.push(randomSymbol);
     }
-
-    console.log(symbols);
 
     return symbols;
   }

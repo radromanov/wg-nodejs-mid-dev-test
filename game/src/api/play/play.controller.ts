@@ -16,7 +16,8 @@ export class PlayController {
     await this.rtpService.recordBet(bet);
     await this.walletService.withdraw(bet);
 
-    const { matrix, winnings } = await this.playService.play(bet);
+    const symbols = this.playService.spin();
+    const { matrix, winnings } = await this.playService.play(bet, symbols);
 
     if (winnings) {
       await this.rtpService.recordWinning(winnings);

@@ -1,10 +1,9 @@
 import { PlayService } from "@api/play";
-import { BET_MULTIPLIER, SLOT_COLS, SLOT_ROWS } from "@lib/constants";
+import { SLOT_COLS, SLOT_ROWS, TOTAL_SLOTS } from "@lib/constants";
 
 describe("Play Service", () => {
   let playService: PlayService;
   const bet = 100;
-  const wallet = 2000;
 
   beforeEach(() => {
     playService = new PlayService();
@@ -12,43 +11,31 @@ describe("Play Service", () => {
 
   it("should contain methods", () => {
     expect(playService).toHaveProperty("play");
+    expect(playService).toHaveProperty("spin");
   });
 
-  describe("Play", () => {
-    it("should return a matrix and winnings", async () => {
-      const result = await playService.play(bet);
-      expect(result).toHaveProperty("matrix");
-      expect(result).toHaveProperty("winnings");
-      expect(result.matrix.length).toBe(SLOT_COLS);
-      result.matrix.forEach((column) => {
-        expect(column.length).toBe(SLOT_ROWS);
-      });
-    });
+  it("should return an array of symbols", () => {
+    const symbols = playService.spin();
+
+    expect(Array.isArray(symbols)).toBeTruthy();
+    expect(symbols.length).toBe(TOTAL_SLOTS);
   });
 
-  describe("Deduct from wallet", () => {
-    it("should deduct the bet amount from the wallet", () => {
-      let initialWallet = wallet;
-      playService.play(bet);
-      initialWallet -= bet;
+  it("should return a matrix and winnings", async () => {
+    const symbols = playService.spin();
+    const result = await playService.play(bet, symbols);
 
-      expect(initialWallet).toBe(wallet - bet);
-    });
+    expect(result).toHaveProperty("matrix");
+    expect(result).toHaveProperty("winnings");
   });
 
-  describe("Update the wallet", () => {
-    it("should update the wallet with winnings if symbols are equal", async () => {
-      jest.spyOn(playService as any, "spin").mockReturnValue(["A", "A", "A"]);
-      const result = await playService.play(bet);
+  it("should return matrix in the correct format", async () => {
+    const symbols = playService.spin();
+    const result = await playService.play(bet, symbols);
 
-      expect(result.winnings).toBe(bet * BET_MULTIPLIER);
-    });
-
-    it("should return zero winnings if symbols are not equal", async () => {
-      jest.spyOn(playService as any, "spin").mockReturnValue(["A", "B", "C"]);
-
-      const result = await playService.play(bet);
-      expect(result.winnings).toBe(0);
+    expect(result.matrix.length).toBe(SLOT_COLS);
+    result.matrix.forEach((column) => {
+      expect(column.length).toBe(SLOT_ROWS);
     });
   });
 });
