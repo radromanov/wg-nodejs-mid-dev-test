@@ -1,0 +1,157 @@
+import { app } from "@api/app";
+import { WalletService } from "@api/wallet";
+import { ROUTES } from "@lib/constants";
+import request from "supertest";
+
+describe(ROUTES.WALLET, () => {
+  const endpoints = app.endpoints();
+  const walletService = new WalletService();
+
+  const getCurrentBalance = async () =>
+    (await (
+      await request(endpoints).get(`${ROUTES.WALLET}/${ROUTES.BALANCE}`)
+    ).body.currentBalance) as number;
+
+  describe(ROUTES.BALANCE, () => {
+    const endpoint = `${ROUTES.WALLET}/${ROUTES.BALANCE}`;
+
+    describe("Method Validation", () => {
+      const invalidMethods = ["post", "put", "patch", "delete"] as const;
+
+      invalidMethods.forEach((method) => {
+        it(`should respond with 405 for ${method.toUpperCase()} method`, async () =>
+          await request(endpoints)[method](endpoint).expect(405));
+      });
+    });
+
+    describe("GET /", () => {
+      it("should return current balance and respond with 200", async () => {
+        const response = await request(endpoints).get(endpoint).expect(200);
+
+        expect(response.body).toHaveProperty("currentBalance");
+        expect(typeof response.body.currentBalance).toBe("number");
+      });
+    });
+
+    describe("OPTIONS /", () => {
+      it("should respond with 204 and allow POST and OPTIONS methods", async () => {
+        const response = await request(endpoints).options(endpoint);
+        expect(response.status).toBe(204);
+
+        const allowedMethods = response.headers["access-control-allow-methods"];
+        expect(allowedMethods).toContain("GET");
+        expect(allowedMethods).toContain("OPTIONS");
+      });
+    });
+  });
+
+  describe(ROUTES.DEPOSIT, () => {
+    const endpoint = `${ROUTES.WALLET}/${ROUTES.DEPOSIT}`;
+
+    describe("Method Validation", () => {
+      const invalidMethods = ["get", "put", "patch", "delete"] as const;
+
+      invalidMethods.forEach((method) => {
+        it(`should respond with 405 for ${method.toUpperCase()} method`, async () =>
+          await request(endpoints)[method](endpoint).expect(405));
+      });
+    });
+
+    describe("POST /", () => {
+      let starterBalance: number;
+
+      beforeEach(async () => {
+        starterBalance = await getCurrentBalance();
+      });
+
+      it("should deposit funds to the player's wallet and respond with 200", async () => {
+        let depositAmount = 1000;
+
+        await request(endpoints)
+          .post(endpoint)
+          .send({ amount: depositAmount })
+          .expect(200);
+
+        const currentBalance = await getCurrentBalance();
+        expect(currentBalance).toBe(starterBalance + depositAmount);
+      });
+    });
+
+    describe("OPTIONS /", () => {
+      it("should respond with 204 and allow POST and OPTIONS methods", async () => {
+        const response = await request(endpoints).options(endpoint).expect(204);
+
+        const allowedMethods = response.headers["access-control-allow-methods"];
+        expect(allowedMethods).toContain("POST");
+        expect(allowedMethods).toContain("OPTIONS");
+      });
+    });
+  });
+
+  describe(ROUTES.WITHDRAW, () => {
+    const endpoint = `${ROUTES.WALLET}/${ROUTES.WITHDRAW}`;
+
+    describe("Method Validation", () => {
+      const invalidMethods = ["get", "put", "patch", "delete"] as const;
+
+      invalidMethods.forEach((method) => {
+        it(`should respond with 405 for ${method.toUpperCase()} method`, async () =>
+          await request(endpoints)[method](endpoint).expect(405));
+      });
+    });
+
+    describe("POST /", () => {
+      let starterBalance: number;
+      const invalidWithdrawAmounts = [
+        { amount: -1000, description: "negative withdraw amount" },
+        { amount: "1000", description: "string withdraw amount" },
+        { amount: true, description: "boolean withdraw amount" },
+        { amount: undefined, description: "missing withdraw amount" },
+      ];
+
+      beforeEach(async () => {
+        starterBalance = await getCurrentBalance();
+        walletService.deposit(starterBalance); // Ensure starting balance is sufficient
+      });
+
+      invalidWithdrawAmounts.forEach(({ amount, description }) => {
+        it(`should reject ${description} and respond with 400`, async () =>
+          await request(endpoints).post(endpoint).send({ amount }).expect(400));
+      });
+
+      it("should withdraw funds from the player's wallet and respond with 200", async () => {
+        const withdrawAmount = 1000;
+
+        await request(endpoints)
+          .post(endpoint)
+          .send({ amount: withdrawAmount })
+          .expect(200);
+
+        const currentBalance = await getCurrentBalance();
+        expect(currentBalance).toBe(starterBalance - withdrawAmount);
+      });
+
+      it("should handle floating point withdraw amount and respond with 200", async () => {
+        let withdrawAmount = 950.5;
+
+        await request(endpoints)
+          .post(endpoint)
+          .send({ amount: withdrawAmount })
+          .expect(200);
+
+        const currentBalance = await getCurrentBalance();
+        expect(currentBalance).toBe(starterBalance - withdrawAmount);
+      });
+    });
+
+    describe("OPTIONS /", () => {
+      it("should respond with 204 and allow POST and OPTIONS methods", async () => {
+        const response = await request(endpoints).options(endpoint).expect(204);
+
+        const allowedMethods = response.headers["access-control-allow-methods"];
+        expect(allowedMethods).toContain("POST");
+        expect(allowedMethods).toContain("OPTIONS");
+      });
+    });
+  });
+});
