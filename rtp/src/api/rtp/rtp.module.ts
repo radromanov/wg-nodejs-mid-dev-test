@@ -1,6 +1,7 @@
-import { catcher } from "@lib/middlewares";
+import { validate } from "@lib/middlewares";
 import { Router } from "express";
 import { RtpController } from "./rtp.controller";
+import { RecordInput } from "./rtp.schema";
 
 export class RtpModule {
   private _router: Router;
@@ -10,9 +11,8 @@ export class RtpModule {
 
   get router() {
     this._router
-      .get("/", catcher(this.controller.handleRtp))
-      .post("/bets", catcher(this.controller.handleRecordBet))
-      .post("/winnings", catcher(this.controller.handleRecordWinning));
+      .get("/", this.controller.handleRtp)
+      .post("/", validate(RecordInput), this.controller.handleRecord);
 
     return this._router;
   }

@@ -96,24 +96,9 @@ export class Application {
           next(error);
         }
       })
-      .post("/rtp/bets", async (req, res, next) => {
+      .post("/rtp", async (req, res, next) => {
         try {
-          const response = await axios.post(
-            `${rtpServiceUrl}/rtp/bets`,
-            req.body
-          );
-
-          res.sendStatus(response.status);
-        } catch (error) {
-          next(error);
-        }
-      })
-      .post("/rtp/winnings", async (req, res, next) => {
-        try {
-          const response = await axios.post(
-            `${rtpServiceUrl}/rtp/winnings`,
-            req.body
-          );
+          const response = await axios.post(`${rtpServiceUrl}/rtp`, req.body);
 
           res.sendStatus(response.status);
         } catch (error) {

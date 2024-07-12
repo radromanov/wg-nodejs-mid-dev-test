@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { RtpService } from "./rtp.service";
+import { RecordInput } from "./rtp.schema";
 
 export class RtpController {
   constructor(private readonly service: RtpService) {}
@@ -10,18 +11,17 @@ export class RtpController {
     res.status(200).json({ rtp });
   };
 
-  handleRecordBet = async (req: Request, res: Response) => {
-    const { bet } = req.body;
+  handleRecord = async (req: Request<{}, {}, RecordInput>, res: Response) => {
+    const { amount, type } = req.body;
 
-    this.service.recordBet(bet);
-
-    res.sendStatus(200);
-  };
-
-  handleRecordWinning = async (req: Request, res: Response) => {
-    const { winning } = req.body;
-
-    this.service.recordWinning(winning);
+    switch (type) {
+      case "bet":
+        this.service.recordBet(amount);
+        break;
+      case "winning":
+        this.service.recordWinning(amount);
+        break;
+    }
 
     res.sendStatus(200);
   };

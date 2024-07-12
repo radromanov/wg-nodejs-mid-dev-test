@@ -1,3 +1,4 @@
+import { ROUTES } from "@lib/constants";
 import { AxiosInstance } from "axios";
 
 export class WalletService {
@@ -5,7 +6,7 @@ export class WalletService {
 
   async deposit(amount: number) {
     try {
-      return await this.walletApi.post("/wallet/deposit", { amount });
+      return await this.walletApi.post(ROUTES.WALLET.DEPOSIT, { amount });
     } catch (error) {
       throw error;
     }
@@ -13,7 +14,7 @@ export class WalletService {
 
   async withdraw(amount: number) {
     try {
-      return await this.walletApi.post("/wallet/withdraw", {
+      return await this.walletApi.post(ROUTES.WALLET.WITHDRAW, {
         amount,
       });
     } catch (error) {

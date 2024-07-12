@@ -10,4 +10,9 @@ export const BET_MULTIPLIER = 5;
 export const ROUTES = {
   PLAY: "/play",
   SIM: "/sim",
-};
+  RTP: "/rtp",
+  WALLET: {
+    DEPOSIT: "/wallet/deposit",
+    WITHDRAW: "/wallet/withdraw",
+  },
+} as const;

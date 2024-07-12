@@ -1,3 +1,4 @@
+import { ROUTES } from "@lib/constants";
 import { AxiosInstance } from "axios";
 
 export class RtpService {
@@ -6,7 +7,7 @@ export class RtpService {
   async recordBet(amount: number) {
     try {
       // Calls the RTP API to increment the totalBets needed to perform the RTP calculation
-      await this.rtpApi.post("/rtp/bets", { bet: amount });
+      return await this.rtpApi.post(ROUTES.RTP, { amount, type: "bet" });
     } catch (error) {
       throw error; // pass to catcher middleware
     }
@@ -15,7 +16,7 @@ export class RtpService {
   async recordWinning(amount: number) {
     try {
       // Calls the RTP API to increment the totalWinnings needed to perform the RTP calculation
-      await this.rtpApi.post("/rtp/winnings", { winning: amount });
+      return await this.rtpApi.post(ROUTES.RTP, { amount, type: "winning" });
     } catch (error) {
       throw error; // pass to catcher middleware
     }
