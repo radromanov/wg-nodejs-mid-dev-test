@@ -28,11 +28,24 @@ describe(ROUTES.RTP, () => {
     describe("Record bet", () => {
       describe("Invalid Inputs", () => {
         const invalidBets: { amount: any; type: any; description: string }[] = [
-          { amount: 123, type: "bets", description: "'type' is invalid" },
-          { amount: -123, type: "bet", description: "'amount' is negative" },
-          { amount: "123", type: "bet", description: "'amount' is invalid" },
-          { amount: true, type: "bet", description: "'amount' is invalid" },
-          { amount: {}, type: "bet", description: "'amount' is invalid" },
+          {
+            amount: 123,
+            type: "bets",
+            description: "'type' is not the string literal 'bet'",
+          },
+          {
+            amount: -123,
+            type: "bet",
+            description: "'amount' is negative integer",
+          },
+          {
+            amount: -123.4,
+            type: "bet",
+            description: "'amount' is negative decimal",
+          },
+          { amount: "123", type: "bet", description: "'amount' is a string" },
+          { amount: true, type: "bet", description: "'amount' is a boolean" },
+          { amount: {}, type: "bet", description: "'amount' is an object" },
         ];
 
         invalidBets.forEach(({ amount, type, description }) => {
@@ -45,7 +58,31 @@ describe(ROUTES.RTP, () => {
         });
       });
 
-      describe("Valid Inputs", () => {});
+      describe("Valid Inputs", () => {
+        const validBets: { amount: any; type: any; description: string }[] = [
+          {
+            amount: 100,
+            type: "bet",
+            description:
+              "'amount' is a positive integer and 'type' equals the string literal 'bet'",
+          },
+          {
+            amount: 100.5,
+            type: "bet",
+            description:
+              "'amount' is a positive decimal and 'type' equals the string literal 'bet'",
+          },
+        ];
+
+        validBets.forEach(({ amount, type, description }) => {
+          it(`should respond with 200 if ${description}`, async () => {
+            await request(endpoints)
+              .post(ROUTES.RTP)
+              .send({ amount, type })
+              .expect(200);
+          });
+        });
+      });
     });
 
     describe("Record winning", () => {
@@ -55,19 +92,32 @@ describe(ROUTES.RTP, () => {
           type: any;
           description: string;
         }[] = [
-          { amount: 123, type: "winnings", description: "'type' is invalid" },
+          {
+            amount: 123,
+            type: "winnings",
+            description: "'type' is not the string literal 'winning'",
+          },
           {
             amount: -123,
             type: "winning",
-            description: "'amount' is negative",
+            description: "'amount' is a negative integer",
+          },
+          {
+            amount: -123.4,
+            type: "winning",
+            description: "'amount' is a negative decimal",
           },
           {
             amount: "123",
             type: "winning",
-            description: "'amount' is invalid",
+            description: "'amount' is a string",
           },
-          { amount: true, type: "winning", description: "'amount' is invalid" },
-          { amount: {}, type: "winning", description: "'amount' is invalid" },
+          {
+            amount: true,
+            type: "winning",
+            description: "'amount' is a boolean",
+          },
+          { amount: {}, type: "winning", description: "'amount' is an object" },
         ];
 
         invalidWinnings.forEach(({ amount, type, description }) => {
@@ -80,7 +130,32 @@ describe(ROUTES.RTP, () => {
         });
       });
 
-      describe("Valid Inputs", () => {});
+      describe("Valid Inputs", () => {
+        const validWinnings: { amount: any; type: any; description: string }[] =
+          [
+            {
+              amount: 100,
+              type: "winning",
+              description:
+                "'amount' is a positive integer and 'type' equals the string literal 'winning'",
+            },
+            {
+              amount: 100.5,
+              type: "winning",
+              description:
+                "'amount' is a positive decimal and 'type' equals the string literal 'winning'",
+            },
+          ];
+
+        validWinnings.forEach(({ amount, type, description }) => {
+          it(`should respond with 200 if ${description}`, async () => {
+            await request(endpoints)
+              .post(ROUTES.RTP)
+              .send({ amount, type })
+              .expect(200);
+          });
+        });
+      });
     });
   });
 
