@@ -39,12 +39,14 @@ describe("RTP Service", () => {
         it(`should throw a 400 if ${description}`, () => {
           if (typeof amount === "number") {
             expect(() => rtpService.recordBet(amount)).toThrow(
-              AppError.BadRequest("Amount must be a positive number")
+              AppError.BadRequest(
+                "Record Bet Error: Amount must be a positive number"
+              )
             );
           } else {
             expect(() => rtpService.recordBet(amount)).toThrow(
               AppError.BadRequest(
-                `Amount must be of type 'number'. Provided ${typeof amount}`
+                `Record Bet Error: Amount must be of type 'number'. Provided ${typeof amount}`
               )
             );
           }
@@ -85,12 +87,14 @@ describe("RTP Service", () => {
         it(`should throw a 400 if ${description}`, () => {
           if (typeof amount === "number") {
             expect(() => rtpService.recordWinning(amount)).toThrow(
-              AppError.BadRequest("Amount must be a positive number")
+              AppError.BadRequest(
+                "Record Winning Error: Amount must be a positive number"
+              )
             );
           } else {
             expect(() => rtpService.recordWinning(amount)).toThrow(
               AppError.BadRequest(
-                `Amount must be of type 'number'. Provided ${typeof amount}`
+                `Record Winning Error: Amount must be of type 'number'. Provided ${typeof amount}`
               )
             );
           }

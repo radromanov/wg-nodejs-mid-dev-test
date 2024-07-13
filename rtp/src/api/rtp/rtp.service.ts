@@ -18,11 +18,13 @@ export class RtpService {
   recordBet(amount: number) {
     if (typeof amount !== "number") {
       throw AppError.BadRequest(
-        `Amount must be of type 'number'. Provided ${typeof amount}`
+        `Record Bet Error: Amount must be of type 'number'. Provided ${typeof amount}`
       );
     }
     if (amount <= 0) {
-      throw AppError.BadRequest("Amount must be a positive number");
+      throw AppError.BadRequest(
+        "Record Bet Error: Amount must be a positive number"
+      );
     }
     this._totalBets += amount;
   }
@@ -30,11 +32,13 @@ export class RtpService {
   recordWinning(amount: number) {
     if (typeof amount !== "number") {
       throw AppError.BadRequest(
-        `Amount must be of type 'number'. Provided ${typeof amount}`
+        `Record Winning Error: Amount must be of type 'number'. Provided ${typeof amount}`
       );
     }
     if (amount <= 0) {
-      throw AppError.BadRequest("Amount must be a positive number");
+      throw AppError.BadRequest(
+        "Record Winning Error: Amount must be a positive number"
+      );
     }
 
     this._totalWinnings += amount;

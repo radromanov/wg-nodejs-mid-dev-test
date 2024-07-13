@@ -1,3 +1,4 @@
+import { AppError } from "@core/AppError";
 import { ROUTES } from "@lib/constants";
 import { AxiosInstance } from "axios";
 
@@ -6,6 +7,17 @@ export class RtpService {
 
   async recordBet(amount: number) {
     try {
+      if (typeof amount !== "number") {
+        throw AppError.BadRequest(
+          `Record Bet Error: Amount must be of type 'number'. Provided ${typeof amount}`
+        );
+      }
+      if (amount <= 0) {
+        throw AppError.BadRequest(
+          "Record Bet Error: Amount must be a positive number"
+        );
+      }
+
       // Calls the RTP API to increment the totalBets needed to perform the RTP calculation
       return await this.rtpApi.post(ROUTES.RTP, { amount, type: "bet" });
     } catch (error) {
@@ -15,6 +27,17 @@ export class RtpService {
 
   async recordWinning(amount: number) {
     try {
+      if (typeof amount !== "number") {
+        throw AppError.BadRequest(
+          `Record Winning Error: Amount must be of type 'number'. Provided ${typeof amount}`
+        );
+      }
+      if (amount <= 0) {
+        throw AppError.BadRequest(
+          "Record Winning Error: Amount must be a positive number"
+        );
+      }
+
       // Calls the RTP API to increment the totalWinnings needed to perform the RTP calculation
       return await this.rtpApi.post(ROUTES.RTP, { amount, type: "winning" });
     } catch (error) {
