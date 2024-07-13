@@ -1,23 +1,49 @@
+import { AppError } from "@core/AppError";
+
 export class RtpService {
-  private totalBets: number;
-  private totalWinnings: number;
+  private _totalBets: number;
+  private _totalWinnings: number;
 
   constructor() {
-    this.totalBets = 0;
-    this.totalWinnings = 0;
+    this._totalBets = 0;
+    this._totalWinnings = 0;
   }
 
   calculateRtp() {
-    return this.totalBets === 0 // Avoid zero-divison
+    return this._totalBets === 0 // Avoid zero-divison
       ? 0
-      : (this.totalWinnings / this.totalBets) * 100;
+      : (this._totalWinnings / this._totalBets) * 100;
   }
 
   recordBet(amount: number) {
-    this.totalBets += amount;
+    if (typeof amount !== "number") {
+      throw AppError.BadRequest(
+        `Amount must be of type 'number'. Provided ${typeof amount}`
+      );
+    }
+    if (amount <= 0) {
+      throw AppError.BadRequest("Amount must be a positive number");
+    }
+    this._totalBets += amount;
   }
 
   recordWinning(amount: number) {
-    this.totalWinnings += amount;
+    if (typeof amount !== "number") {
+      throw AppError.BadRequest(
+        `Amount must be of type 'number'. Provided ${typeof amount}`
+      );
+    }
+    if (amount <= 0) {
+      throw AppError.BadRequest("Amount must be a positive number");
+    }
+
+    this._totalWinnings += amount;
+  }
+
+  get totalBets() {
+    return this._totalBets;
+  }
+  get totalWinnings() {
+    return this._totalWinnings;
   }
 }
