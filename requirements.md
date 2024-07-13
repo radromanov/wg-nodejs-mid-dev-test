@@ -97,10 +97,10 @@
 
 #### 3. GET /rtp:
 
-- [ ] **Response:** `{ "rtp": number }`
-- [ ] **Functionality:**
-  - [ ] Calculate the RTP percentage based on all spins made so far (total bets vs. total winnings).
-  - [ ] Return the RTP percentage.
+- [x] **Response:** `{ "rtp": number }`
+- [x] **Functionality:**
+  - [x] Calculate the RTP percentage based on all spins made so far (total bets vs. total winnings).
+  - [x] Return the RTP percentage.
 
 ### Bonus Requirements:
 
@@ -113,8 +113,8 @@
 #### 2. Automated Tests:
 
 - [x] Use a testing framework (e.g., Mocha, Jest) to write unit and integration tests.
-- [ ] Test individual components such as RNG integration, spin logic, and wallet updates.
-- [ ] Test the API endpoints to ensure they return correct responses and handle errors appropriately.
+- [x] Test individual components such as RNG integration, spin logic, and wallet updates.
+- [x] Test the API endpoints to ensure they return correct responses and handle errors appropriately.
 
 #### 3. Wallet Logic:
 
@@ -122,5 +122,5 @@
   - [x] **POST /wallet/deposit:** Adds funds to the player's wallet.
   - [x] **POST /wallet/withdraw:** Withdraws funds from the player's wallet.
   - [x] **GET /wallet/balance:** Returns the current balance.
-- [ ] Ensure the wallet balance is updated correctly after each play and simulation.
-- [ ] Handle errors such as insufficient balance for a bet or withdrawal.
+- [x] Ensure the wallet balance is updated correctly after each play and simulation.
+- [x] Handle errors such as insufficient balance for a bet or withdrawal.
