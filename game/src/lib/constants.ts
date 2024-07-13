@@ -14,5 +14,6 @@ export const ROUTES = {
   WALLET: {
     DEPOSIT: "/wallet/deposit",
     WITHDRAW: "/wallet/withdraw",
+    BALANCE: "/wallet/balance",
   },
 } as const;

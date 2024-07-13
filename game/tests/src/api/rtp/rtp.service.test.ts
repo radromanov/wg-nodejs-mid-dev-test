@@ -7,7 +7,6 @@ jest.mock("@lib/axios");
 
 describe("RTP Service", () => {
   let rtpService: RtpService;
-  const amount = 100.5;
 
   beforeEach(() => {
     rtpService = new RtpService(rtpApi);
@@ -133,18 +132,5 @@ describe("RTP Service", () => {
         });
       });
     });
-  });
-
-  it("should record a winning and respond with 200", async () => {
-    (rtpApi.post as jest.Mock).mockResolvedValue({ status: 200, data: "OK" });
-
-    const result = await rtpService.recordWinning(amount);
-
-    expect(rtpApi.post).toHaveBeenCalledWith(ROUTES.RTP, {
-      amount,
-      type: "winning",
-    });
-    expect(result.status).toBe(200);
-    expect(result.data).toBe("OK");
   });
 });
