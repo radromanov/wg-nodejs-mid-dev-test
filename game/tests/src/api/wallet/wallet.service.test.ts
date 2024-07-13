@@ -16,7 +16,7 @@ describe("Wallet Service", () => {
   });
 
   describe("Method Validation", () => {
-    const availableMethods = ["deposit", "withdraw"];
+    const availableMethods = ["deposit", "withdraw", "getCurrentBalance"];
 
     availableMethods.forEach((method) => {
       it(`should contain ${method}`, () => {
