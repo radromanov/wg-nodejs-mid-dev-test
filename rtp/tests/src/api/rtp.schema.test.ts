@@ -42,4 +42,40 @@ describe("RTP Schema Validation", () => {
       });
     });
   });
+
+  describe("Valid Inputs", () => {
+    const validInputs: { amount: any; type: any; description: string }[] = [
+      {
+        amount: 123,
+        type: "bet",
+        description:
+          "'amount' is a positive integer and 'type' is the string literal 'bet'",
+      },
+      {
+        amount: 123.5,
+        type: "bet",
+        description:
+          "'amount' is a positive decimal and 'type' is the string literal 'bet'",
+      },
+      {
+        amount: 123,
+        type: "winning",
+        description:
+          "'amount' is a positive integer and 'type' is the string literal 'winning'",
+      },
+      {
+        amount: 123.5,
+        type: "winning",
+        description:
+          "'amount' is a positive decimal and 'type' is the string literal 'winning'",
+      },
+    ];
+
+    validInputs.forEach(({ amount, type, description }) => {
+      it(`should successfully parse if ${description}`, () => {
+        const valid = RecordInput.safeParse({ body: { amount, type } });
+        expect(valid.success).toBe(true);
+      });
+    });
+  });
 });
