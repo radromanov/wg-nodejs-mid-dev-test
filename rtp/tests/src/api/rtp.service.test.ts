@@ -32,6 +32,7 @@ describe("RTP Service", () => {
         { amount: true, description: "'amount' is a boolean" },
         { amount: {}, description: "'amount' is an object" },
         { amount: undefined, description: "'amount' is missing" },
+        { amount: null, description: "'amount' is missing" },
       ];
 
       invalidInputs.forEach(({ amount, description }) => {

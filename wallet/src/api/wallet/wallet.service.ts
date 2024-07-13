@@ -9,20 +9,34 @@ export class WalletService {
   }
 
   deposit(amount: number) {
+    if (typeof amount !== "number") {
+      throw AppError.BadRequest(
+        `Deposit Error: Amount must be of type 'number'. Provided ${typeof amount}`
+      );
+    }
     if (amount <= 0) {
-      throw AppError.BadRequest("Amount must be a positive number");
+      throw AppError.BadRequest(
+        "Deposit Error: Amount must be a positive number"
+      );
     }
 
     this.wallet += amount;
   }
 
   withdraw(amount: number) {
+    if (typeof amount !== "number") {
+      throw AppError.BadRequest(
+        `Withdraw Error: Amount must be of type 'number'. Provided ${typeof amount}`
+      );
+    }
     if (amount <= 0) {
-      throw AppError.BadRequest("Amount must be a positive number");
+      throw AppError.BadRequest(
+        "Withdraw Error: Amount must be a positive number"
+      );
     }
     if (amount > this.wallet) {
       throw AppError.BadRequest(
-        `You do not have sufficient funds to withdraw ${amount}`
+        `Withdraw Error: You do not have sufficient funds to withdraw ${amount}`
       );
     }
 
