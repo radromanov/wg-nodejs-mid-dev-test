@@ -63,16 +63,17 @@ describe(ROUTES.WALLET, () => {
       });
 
       describe("Invalid Inputs", () => {
-        const invalidDepositAmounts = [
+        const invalidInputs = [
           { amount: -1000, description: "'amount' is a negative integer" },
           { amount: -1000.5, description: "'amount' is a negative decimal" },
           { amount: "1000", description: "'amount' is a string" },
           { amount: true, description: "'amount' is a boolean" },
           { amount: {}, description: "'amount' is an object" },
           { amount: undefined, description: "'amount' is missing" },
+          { amount: null, description: "'amount' is missing" },
         ];
 
-        invalidDepositAmounts.forEach(({ amount, description }) => {
+        invalidInputs.forEach(({ amount, description }) => {
           it(`should respond with 400 if ${description}`, async () =>
             await request(endpoints)
               .post(endpoint)
@@ -82,12 +83,12 @@ describe(ROUTES.WALLET, () => {
       });
 
       describe("Valid Inputs", () => {
-        const validDepositAmounts = [
+        const validInputs = [
           { amount: 100, description: "'amount' is a positive integer" },
           { amount: 100.5, description: "'amount' is a positive decimal" },
         ];
 
-        validDepositAmounts.forEach(({ amount, description }) => {
+        validInputs.forEach(({ amount, description }) => {
           it(`should respond with 200 if ${description} and deposit funds to the player's wallet`, async () => {
             await request(endpoints)
               .post(endpoint)
@@ -133,16 +134,17 @@ describe(ROUTES.WALLET, () => {
       });
 
       describe("Invalid Inputs", () => {
-        const invalidWithdrawAmounts = [
+        const invalidInputs = [
           { amount: -1000, description: "'amount' is a negative integer" },
           { amount: -1000.5, description: "'amount' is a negative decimal" },
           { amount: "1000", description: "'amount' is a string" },
           { amount: true, description: "'amount' is a boolean" },
           { amount: {}, description: "'amount' is an object" },
           { amount: undefined, description: "'amount' is missing" },
+          { amount: null, description: "'amount' is missing" },
         ];
 
-        invalidWithdrawAmounts.forEach(({ amount, description }) => {
+        invalidInputs.forEach(({ amount, description }) => {
           it(`should respond with 400 if ${description}`, async () =>
             await request(endpoints)
               .post(endpoint)
@@ -152,12 +154,12 @@ describe(ROUTES.WALLET, () => {
       });
 
       describe("Valid Inputs", () => {
-        const validWithdrawAmounts = [
+        const validInputs = [
           { amount: 100, description: "'amount' is a positive integer" },
           { amount: 100.5, description: "'amount' is a positive decimal" },
         ];
 
-        validWithdrawAmounts.forEach(({ amount, description }) => {
+        validInputs.forEach(({ amount, description }) => {
           it(`should respond with 200 if ${description} and withdraw funds from the player's wallet`, async () => {
             await request(endpoints)
               .post(endpoint)
