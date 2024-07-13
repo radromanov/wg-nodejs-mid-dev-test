@@ -19,24 +19,12 @@ describe(ROUTES.SIM, () => {
     await walletService.deposit(bet * count);
   });
 
-  describe("Non-implemented Methods", () => {
+  describe("Method Validation", () => {
     const methods = ["get", "put", "patch", "delete"] as const;
     methods.forEach((method) => {
       it(`should respond with 405 for ${method.toUpperCase()} method`, async () => {
         await request(endpoints)[method](ROUTES.SIM).expect(405);
       });
-    });
-  });
-
-  describe("OPTIONS /", () => {
-    it("should respond with 204 for OPTIONS method", async () => {
-      await request(endpoints).options(ROUTES.SIM).expect(204);
-    });
-    it("should allow POST and OPTIONS methods", async () => {
-      const response = await request(endpoints).options(ROUTES.SIM);
-      const allowedMethods = response.headers["access-control-allow-methods"];
-      expect(allowedMethods).toContain("POST");
-      expect(allowedMethods).toContain("OPTIONS");
     });
   });
 
@@ -89,6 +77,18 @@ describe(ROUTES.SIM, () => {
           expect(response.body).toHaveProperty("netResult");
         });
       });
+    });
+  });
+
+  describe("OPTIONS /", () => {
+    it("should respond with 204 for OPTIONS method", async () => {
+      await request(endpoints).options(ROUTES.SIM).expect(204);
+    });
+    it("should allow POST and OPTIONS methods", async () => {
+      const response = await request(endpoints).options(ROUTES.SIM);
+      const allowedMethods = response.headers["access-control-allow-methods"];
+      expect(allowedMethods).toContain("POST");
+      expect(allowedMethods).toContain("OPTIONS");
     });
   });
 });
