@@ -1,18 +1,6 @@
 import { SimInput } from "@api/sim";
 
 describe("Sim Schema Validation", () => {
-  describe("Valid Inputs", () => {
-    it("should successfully parse a valid object with integer bet", () => {
-      const valid = SimInput.safeParse({ body: { count: 5, bet: 100 } });
-      expect(valid.success).toBe(true);
-    });
-
-    it("should successfully parse a valid object with decimal bet", () => {
-      const valid = SimInput.safeParse({ body: { count: 5, bet: 100.5 } });
-      expect(valid.success).toBe(true);
-    });
-  });
-
   describe("Invalid Inputs", () => {
     const invalidInputs: { bet: any; count: any; description: string }[] = [
       { bet: "123", count: 3, description: "'bet' is a string" },
@@ -38,22 +26,22 @@ describe("Sim Schema Validation", () => {
   });
 
   describe("Valid Inputs", () => {
-    const validInputs: { bet: any; count: any; description: string }[] = [
+    const validInputs = [
       {
-        bet: 100,
+        bet: 123,
         count: 3,
-        description: "'bet' and 'count' are positive integers'",
+        description: "'bet' and 'count' are positive integers",
       },
       {
-        bet: 100.5,
+        bet: 123.4,
         count: 3,
         description:
-          "'bet' is a positive decimal and 'count' is a positive integer'",
+          "'bet' is a positive decimal and 'count' is a positive integer",
       },
     ];
 
     validInputs.forEach(({ bet, count, description }) => {
-      it(`should successfully parse if ${description}`, async () => {
+      it(`should successfully parse if ${description}`, () => {
         const valid = SimInput.safeParse({ body: { bet, count } });
         expect(valid.success).toBe(true);
       });
