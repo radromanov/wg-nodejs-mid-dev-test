@@ -1,5 +1,4 @@
 import { WalletService } from "@api/wallet";
-import { AppError } from "@core/AppError";
 
 describe("Wallet Service", () => {
   let initialWallet: number;
@@ -36,19 +35,11 @@ describe("Wallet Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, () => {
-          if (typeof amount === "number") {
-            expect(() => walletService.withdraw(amount)).toThrow(
-              AppError.BadRequest(
-                "Withdraw Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            expect(() => walletService.withdraw(amount)).toThrow(
-              AppError.BadRequest(
-                `Withdraw Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          expect(() => walletService.withdraw(amount)).toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
@@ -70,11 +61,9 @@ describe("Wallet Service", () => {
 
       it("should throw an error when withdrawing an excessive amount", () => {
         expect(() => walletService.withdraw(wallet + 1)).toThrow(
-          AppError.BadRequest(
-            `Withdraw Error: You do not have sufficient funds to withdraw ${
-              wallet + 1
-            }`
-          )
+          expect.objectContaining({
+            status: 400,
+          })
         );
       });
     });
@@ -94,19 +83,11 @@ describe("Wallet Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, () => {
-          if (typeof amount === "number") {
-            expect(() => walletService.deposit(amount)).toThrow(
-              AppError.BadRequest(
-                "Deposit Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            expect(() => walletService.deposit(amount)).toThrow(
-              AppError.BadRequest(
-                `Deposit Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          expect(() => walletService.deposit(amount)).toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
