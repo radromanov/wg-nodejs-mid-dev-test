@@ -35,7 +35,7 @@ Make sure you have the following installed on your system:
 
    ```sh
    git clone https://github.com/radromanov/wg-nodejs-mid-dev-test.git
-   cd slot-machine-game
+   cd wg-nodejs-mid-dev-test
    ```
 
 2. Build and start the services using Docker Compose:
@@ -68,7 +68,7 @@ The below are all available, however, the intent is for all HTTP calls to route 
 
 ### Testing the Routes
 
-You can use tools like `curl`, `Postman`, or any HTTP client to test the available routes.
+You can use tools like `curl`, `Postman`, or any HTTP client to test the available routes. Bear in mind, if using `Postman`, you might have to substitute "localhost" for "127.0.0.1" in the url.
 
 #### Example using curl
 

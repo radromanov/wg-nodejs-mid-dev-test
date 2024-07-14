@@ -1,5 +1,5 @@
 import "@lib/dotenv";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { HOST_MIN_LENGTH } from "@lib/constants";
 import { minimum, required } from "@lib/zod";
 
@@ -53,9 +53,16 @@ export class Config {
       if (key) return fromEnv[key];
       else return fromEnv;
     } catch (error) {
-      throw AppError.InternalServerError(
-        "Internal Server Error - could not initialize Gateway Service."
-      );
+      if (error instanceof ZodError) {
+        throw AppError.ServiceUnavailable(
+          error.errors[0]?.message ||
+            "Gateway Service unavailable. Please check your '.env' variables"
+        );
+      } else {
+        throw AppError.InternalServerError(
+          "Internal Server Error - could not initialize Gateway Service."
+        );
+      }
     }
   }
 }
