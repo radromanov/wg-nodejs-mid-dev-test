@@ -4,8 +4,6 @@ import { SimService } from "@api/sim";
 describe("Simulation Service", () => {
   let simService: SimService;
   let playService: PlayService;
-  const bet = 100;
-  const spins = 5;
 
   beforeEach(() => {
     playService = new PlayService();
@@ -52,33 +50,48 @@ describe("Simulation Service", () => {
     });
   });
 
-  it("should simulate multiple playService.play() calls and calculate net result correctly", async () => {
-    // Mock the PlayService methods
-    const mockSpin = jest
-      .spyOn(playService, "spin")
-      .mockImplementation(() => ["A", "B", "C"]);
-    const mockPlay = jest
-      .spyOn(playService, "play")
-      .mockImplementation(async () => ({
-        matrix: [
-          ["A", "B", "C"],
-          ["A", "B", "C"],
-          ["A", "B", "C"],
-        ],
-        winnings: 50,
-      }));
+  describe("Valid Inputs", () => {
+    const winnings = 50;
+    const validInputs: { count: number; bet: number; description: string }[] = [
+      {
+        count: 3,
+        bet: 123,
+        description: "'count' and 'bet' are positive integers",
+      },
+      {
+        count: 3,
+        bet: 123.4,
+        description:
+          "'count' is a positive integer and 'bet' is a positive decimal",
+      },
+    ];
 
-    const totalWinnings = await simService.simulate(spins, bet);
-    const totalBet = bet * spins;
-    const netResult = totalWinnings - totalBet;
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
-    expect(mockSpin).toHaveBeenCalledTimes(spins);
-    expect(mockPlay).toHaveBeenCalledTimes(spins);
-    expect(totalWinnings).toBe(50 * spins); // Each play() call returns 50 winnings
-    expect(netResult).toBe(50 * spins - totalBet);
-  });
+    validInputs.forEach(({ count, bet, description }) => {
+      it(`should simulate multiple plays and return correct totalWinnings if ${description}`, async () => {
+        const mockSpin = jest
+          .spyOn(playService, "spin")
+          .mockImplementation(() => ["A", "B", "C"]);
+        const mockPlay = jest
+          .spyOn(playService, "play")
+          .mockImplementation(async () => ({
+            matrix: [
+              ["A", "B", "C"],
+              ["A", "B", "C"],
+              ["A", "B", "C"],
+            ],
+            winnings,
+          }));
 
-  afterEach(() => {
-    jest.restoreAllMocks();
+        const totalWinnings = await simService.simulate(count, bet);
+
+        expect(mockSpin).toHaveBeenCalledTimes(count);
+        expect(mockPlay).toHaveBeenCalledTimes(count);
+        expect(totalWinnings).toBe(winnings * count); // Each play() call returns `n` winnings
+      });
+    });
   });
 });
