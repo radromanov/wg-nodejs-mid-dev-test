@@ -34,6 +34,31 @@ describe(ROUTES.RTP, () => {
             description: "'type' is not the string literal 'bet'",
           },
           {
+            amount: 123,
+            type: true,
+            description: "'type' is a boolean",
+          },
+          {
+            amount: 123,
+            type: 1,
+            description: "'type' is a number",
+          },
+          {
+            amount: 123,
+            type: {},
+            description: "'type' is an object",
+          },
+          {
+            amount: 123,
+            type: undefined,
+            description: "'type' is missing",
+          },
+          {
+            amount: 123,
+            type: null,
+            description: "'type' is missing",
+          },
+          {
             amount: -123,
             type: "bet",
             description: "'amount' is negative integer",
@@ -96,6 +121,31 @@ describe(ROUTES.RTP, () => {
             amount: 123,
             type: "winnings",
             description: "'type' is not the string literal 'winning'",
+          },
+          {
+            amount: 123,
+            type: true,
+            description: "'type' is a boolean",
+          },
+          {
+            amount: 123,
+            type: 1,
+            description: "'type' is a number",
+          },
+          {
+            amount: 123,
+            type: {},
+            description: "'type' is an object",
+          },
+          {
+            amount: 123,
+            type: undefined,
+            description: "'type' is missing",
+          },
+          {
+            amount: 123,
+            type: null,
+            description: "'type' is missing",
           },
           {
             amount: -123,

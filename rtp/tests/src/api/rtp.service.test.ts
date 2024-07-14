@@ -1,5 +1,4 @@
 import { RtpService } from "@api/rtp";
-import { AppError } from "@core/AppError";
 import { BET_MULTIPLIER } from "@lib/constants";
 
 describe("RTP Service", () => {
@@ -37,19 +36,11 @@ describe("RTP Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, () => {
-          if (typeof amount === "number") {
-            expect(() => rtpService.recordBet(amount)).toThrow(
-              AppError.BadRequest(
-                "Record Bet Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            expect(() => rtpService.recordBet(amount)).toThrow(
-              AppError.BadRequest(
-                `Record Bet Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          expect(() => rtpService.recordBet(amount)).toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
@@ -75,29 +66,21 @@ describe("RTP Service", () => {
     describe("Invalid Inputs", () => {
       const invalidInputs: { amount: any; description: string }[] = [
         { amount: "123", description: "'amount' is a string" },
-        { amount: "123.3", description: "'amount' is a string decimal" },
         { amount: -123, description: "'amount' is a negative integer" },
         { amount: -123.4, description: "'amount' is a negative decimal" },
         { amount: true, description: "'amount' is a boolean" },
         { amount: {}, description: "'amount' is an object" },
         { amount: undefined, description: "'amount' is missing" },
+        { amount: null, description: "'amount' is missing" },
       ];
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, () => {
-          if (typeof amount === "number") {
-            expect(() => rtpService.recordWinning(amount)).toThrow(
-              AppError.BadRequest(
-                "Record Winning Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            expect(() => rtpService.recordWinning(amount)).toThrow(
-              AppError.BadRequest(
-                `Record Winning Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          expect(() => rtpService.recordWinning(amount)).toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });

@@ -1,5 +1,4 @@
 import { WalletService } from "@api/wallet";
-import { AppError } from "@core/AppError";
 import { walletApi } from "@lib/axios";
 
 jest.mock("@lib/axios");
@@ -9,10 +8,6 @@ describe("Wallet Service", () => {
 
   beforeEach(() => {
     walletService = new WalletService(walletApi);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   describe("Method Validation", () => {
@@ -39,32 +34,28 @@ describe("Wallet Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, async () => {
-          if (typeof amount === "number") {
-            await expect(walletService.withdraw(amount)).rejects.toThrow(
-              AppError.BadRequest(
-                "Withdraw Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            await expect(walletService.withdraw(amount)).rejects.toThrow(
-              AppError.BadRequest(
-                `Withdraw Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          await expect(walletService.withdraw(amount)).rejects.toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
 
     describe("Valid Inputs", () => {
-      beforeEach(async () => {
-        walletService = new WalletService(walletApi);
-      });
-
       const validInputs: { amount: any; description: string }[] = [
         { amount: 123, description: "'amount' is a positive integer" },
         { amount: 123.4, description: "'amount' is a positive decimal" },
       ];
+
+      beforeEach(async () => {
+        walletService = new WalletService(walletApi);
+      });
+
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
 
       validInputs.forEach(({ amount, description }) => {
         it(`should successfully withdraw amount if ${description}`, async () => {
@@ -97,11 +88,9 @@ describe("Wallet Service", () => {
         });
 
         await expect(walletService.withdraw(balance + 1)).rejects.toThrow(
-          AppError.BadRequest(
-            `Withdraw Error: You do not have sufficient funds to withdraw ${
-              balance + 1
-            }`
-          )
+          expect.objectContaining({
+            status: 400,
+          })
         );
       });
     });

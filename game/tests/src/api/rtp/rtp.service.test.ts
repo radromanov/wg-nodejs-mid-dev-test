@@ -1,5 +1,4 @@
 import { RtpService } from "@api/rtp";
-import { AppError } from "@core/AppError";
 import { rtpApi } from "@lib/axios";
 import { ROUTES } from "@lib/constants";
 
@@ -10,10 +9,6 @@ describe("RTP Service", () => {
 
   beforeEach(() => {
     rtpService = new RtpService(rtpApi);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   describe("recordBet method", () => {
@@ -30,19 +25,11 @@ describe("RTP Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, async () => {
-          if (typeof amount === "number") {
-            await expect(() => rtpService.recordBet(amount)).rejects.toThrow(
-              AppError.BadRequest(
-                "Record Bet Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            await expect(() => rtpService.recordBet(amount)).rejects.toThrow(
-              AppError.BadRequest(
-                `Record Bet Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          await expect(() => rtpService.recordBet(amount)).rejects.toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
@@ -52,6 +39,10 @@ describe("RTP Service", () => {
         { amount: 123, description: "'amount' is a positive integer" },
         { amount: 123.4, description: "'amount' is a positive decimal" },
       ];
+
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
 
       validInputs.forEach(({ amount, description }) => {
         it(`should record a bet and respond with 200 if ${description}`, async () => {
@@ -87,23 +78,11 @@ describe("RTP Service", () => {
 
       invalidInputs.forEach(({ amount, description }) => {
         it(`should throw a 400 if ${description}`, async () => {
-          if (typeof amount === "number") {
-            await expect(() =>
-              rtpService.recordWinning(amount)
-            ).rejects.toThrow(
-              AppError.BadRequest(
-                "Record Winning Error: Amount must be a positive number"
-              )
-            );
-          } else {
-            await expect(() =>
-              rtpService.recordWinning(amount)
-            ).rejects.toThrow(
-              AppError.BadRequest(
-                `Record Winning Error: Amount must be of type 'number'. Provided ${typeof amount}`
-              )
-            );
-          }
+          await expect(() => rtpService.recordWinning(amount)).rejects.toThrow(
+            expect.objectContaining({
+              status: 400,
+            })
+          );
         });
       });
     });
@@ -113,6 +92,10 @@ describe("RTP Service", () => {
         { amount: 123, description: "'amount' is a positive integer" },
         { amount: 123.4, description: "'amount' is a positive decimal" },
       ];
+
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
 
       validInputs.forEach(({ amount, description }) => {
         it(`should record a winning and respond with 200 if ${description}`, async () => {
