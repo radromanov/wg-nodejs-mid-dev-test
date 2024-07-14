@@ -44,6 +44,7 @@ export class SimService {
 
     for (let i = 0; i < count; i++) {
       const symbols = this.playService.spin();
+
       const { winnings } = await this.playService.play(bet, symbols);
 
       if (winnings) {

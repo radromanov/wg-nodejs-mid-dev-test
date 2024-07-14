@@ -82,7 +82,15 @@ export class PlayService {
       );
     }
 
-    return allEqual(symbols) ? bet * BET_MULTIPLIER : 0;
+    const isWin = allEqual(symbols);
+
+    if (isWin) {
+      console.log("You won!", symbols);
+      return bet * BET_MULTIPLIER;
+    } else {
+      console.log("You lose, but maybe next time.", symbols);
+      return 0;
+    }
   }
 
   private generateMatrix() {
