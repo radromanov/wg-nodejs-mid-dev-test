@@ -1,7 +1,9 @@
 import { Express, json, urlencoded } from "express";
 import axios from "axios";
 import { Config } from "./Config";
-import { globalError } from "../lib";
+import { globalError, ROUTES } from "../lib";
+import { PlayController, PlayModule } from "@api/game/play";
+import { gameApi } from "@lib/axios";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -16,23 +18,12 @@ export class Application {
     const { gameServiceUrl, walletServiceUrl, rtpServiceUrl } =
       this.config.get();
 
+    const playController = new PlayController(gameApi);
+    const playModule = new PlayModule(playController);
+
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app
-      .post("/play", async (req, res, next) => {
-        try {
-          const response = await axios.post<{
-            matrix: string[][];
-            winnings: number;
-          }>(`${gameServiceUrl}/play`, req.body);
-
-          res.status(response.status).json({
-            matrix: response.data.matrix,
-            winnings: response.data.winnings,
-          });
-        } catch (error) {
-          next(error);
-        }
-      })
+      .use(ROUTES.PLAY, playModule.router)
       .post("/sim", async (req, res, next) => {
         try {
           const response = await axios.post<{
