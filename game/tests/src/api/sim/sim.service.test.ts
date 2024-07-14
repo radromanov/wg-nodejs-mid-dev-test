@@ -12,6 +12,46 @@ describe("Simulation Service", () => {
     simService = new SimService(playService);
   });
 
+  describe("Method Validation", () => {
+    const availableMethods = ["simulate"];
+
+    availableMethods.forEach((method) => {
+      it(`should contain ${method} method`, () => {
+        expect(simService).toHaveProperty(method);
+      });
+    });
+  });
+
+  describe("Invalid Inputs", () => {
+    const invalidInputs: { count: any; bet: any; description: string }[] = [
+      { bet: "123", count: 3, description: "'bet' is a string" },
+      { bet: -123, count: 3, description: "'bet' is a negative integer" },
+      { bet: -123.4, count: 3, description: "'bet' is a negative decimal" },
+      { bet: true, count: 3, description: "'bet' is a boolean" },
+      { bet: {}, count: 3, description: "'bet' is an object" },
+      { bet: undefined, count: 3, description: "'bet' is missing" },
+      { bet: null, count: 3, description: "'bet' is missing" },
+      { count: "3", bet: 123, description: "'count' is a string" },
+      { count: -3, bet: 123, description: "'count' is a negative integer" },
+      { count: 3.4, bet: 123, description: "'count' is a positive decimal" },
+      { count: -3.4, bet: 123, description: "'count' is a negative decimal" },
+      { count: true, bet: 123, description: "'count' is a boolean" },
+      { count: {}, bet: 123, description: "'count' is an object" },
+      { count: undefined, bet: 123, description: "'count' is missing" },
+      { count: null, bet: 123, description: "'count' is missing" },
+    ];
+
+    invalidInputs.forEach(({ count, bet, description }) => {
+      it(`should throw a 400 if ${description}`, async () => {
+        await expect(() => simService.simulate(count, bet)).rejects.toThrow(
+          expect.objectContaining({
+            status: 400,
+          })
+        );
+      });
+    });
+  });
+
   it("should simulate multiple playService.play() calls and calculate net result correctly", async () => {
     // Mock the PlayService methods
     const mockSpin = jest

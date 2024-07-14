@@ -3,6 +3,10 @@ import { AppError } from "@core/AppError";
 import { Config } from "@core/Config";
 import { Request, Response, NextFunction } from "express";
 
+export function isDecimal(n: number) {
+  return n - Math.floor(n) !== 0;
+}
+
 export function rand(lower: number = 0, upper?: number) {
   if (upper) {
     return _random(lower, upper - 1); // lodash's random is inclusive of the upper bound
