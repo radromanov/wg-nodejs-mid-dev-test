@@ -54,7 +54,7 @@ export class Config {
       else return fromEnv;
     } catch (error) {
       throw AppError.InternalServerError(
-        "Internal Server Error - could not initialize Game Service."
+        "Internal Server Error - could not initialize Gateway Service."
       );
     }
   }
