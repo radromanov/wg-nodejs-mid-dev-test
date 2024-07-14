@@ -15,6 +15,33 @@ export function allEqual<T>(arr: T[]) {
   return arr.every((val) => val === arr[0]);
 }
 
+export function allOfType<T>(
+  arr: T[],
+  type:
+    | "string"
+    | "number"
+    | "boolean"
+    | "object"
+    | "bigint"
+    | "function"
+    | "symbol"
+    | "undefined"
+) {
+  if (!arr.length) {
+    throw AppError.BadRequest(
+      `AllOfType Error: Symbols must be a non-empty array`
+    );
+  }
+
+  if (!Array.isArray(arr)) {
+    throw AppError.BadRequest(
+      `AllOfType Error: Symbols must be an array. Provided ${typeof arr}`
+    );
+  }
+
+  return arr.every((val) => typeof val === type);
+}
+
 export function handleNotImplemented(
   req: Request,
   _res: Response,

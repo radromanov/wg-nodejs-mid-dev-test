@@ -8,6 +8,7 @@ describe("Play Schema Validation", () => {
       { bet: -100, description: "'bet' is a negative integer" },
       { bet: -100.5, description: "'bet' is a negative decimal" },
       { bet: undefined, description: "'bet' is missing" },
+      { bet: null, description: "'bet' is missing" },
       { bet: {}, description: "'bet' is an object" },
     ];
 
