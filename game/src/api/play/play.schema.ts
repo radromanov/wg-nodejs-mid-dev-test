@@ -1,5 +1,5 @@
 import z from "zod";
-import { errors } from "@lib/zod";
+import { errors } from "@shared/lib/zod";
 
 export const PlayInput = z.object({
   body: z.object({

@@ -11,13 +11,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
 
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@root": ["./src"],
-      "@core/*": ["./src/core/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@api/*": ["./src/api/*"],
-      "@shared/*": ["../shared/src/*"]
+      "@shared/errors/*": ["./errors/*"],
+      "@shared/lib/*": ["./lib/*"]
     },
 
     "strict": true,

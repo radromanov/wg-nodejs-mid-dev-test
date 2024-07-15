@@ -1,4 +1,4 @@
-import { AppError } from "@core/AppError";
+import { AppError } from "@shared/errors/AppError";
 import {
   BET_MULTIPLIER,
   SLOT_COLS,

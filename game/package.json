@@ -40,6 +40,7 @@
     "@root": "./src",
     "@core": "./src/core",
     "@lib": "./src/lib",
-    "@api": "./src/api"
+    "@api": "./src/api",
+    "@shared": "../shared/src"
   }
 }

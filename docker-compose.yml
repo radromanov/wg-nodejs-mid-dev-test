@@ -27,6 +27,8 @@ services:
     environment:
       - NODE_ENV=development
       - GATEWAY_URL=http://gateway:3000 # Redefining the gateway URL due to the Docker Network
+    volumes:
+      - ./shared:/app/shared
     command: ["pnpm", "dev"]
     networks:
       - slot-game-network
@@ -40,6 +42,8 @@ services:
     environment:
       - NODE_ENV=development
       - GATEWAY_URL=http://gateway:3000 # Redefining the gateway URL due to the Docker Network
+    volumes:
+      - ./shared:/app/shared
     command: ["pnpm", "dev"]
     networks:
       - slot-game-network
@@ -53,6 +57,8 @@ services:
     environment:
       - NODE_ENV=development
       - GATEWAY_URL=http://gateway:3000 # Redefining the gateway URL due to the Docker Network
+    volumes:
+      - ./shared:/app/shared
     command: ["pnpm", "dev"]
     networks:
       - slot-game-network

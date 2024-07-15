@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 # Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
+# Copy shared/ files
+COPY ../shared ./shared
+
 # Install pnpm and dependencies
 RUN npm install -g pnpm && pnpm install
 
