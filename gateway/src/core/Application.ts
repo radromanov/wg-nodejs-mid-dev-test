@@ -3,8 +3,9 @@ import axios from "axios";
 import { Config } from "./Config";
 import { globalError, ROUTES } from "../lib";
 import { PlayController, PlayModule } from "@api/game/play";
-import { gameApi } from "@lib/axios";
+import { gameApi, walletApi } from "@lib/axios";
 import { SimModule, SimController } from "@api/game/sim";
+import { WalletController, WalletModule } from "@api/wallet";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -16,55 +17,21 @@ export class Application {
 
   endpoints() {
     this.setup();
-    const { walletServiceUrl, rtpServiceUrl } = this.config.get();
+    const { rtpServiceUrl } = this.config.get();
 
-    const simController = new SimController(gameApi);
     const playController = new PlayController(gameApi);
+    const simController = new SimController(gameApi);
+    const walletController = new WalletController(walletApi);
 
-    const simModule = new SimModule(simController);
     const playModule = new PlayModule(playController);
+    const simModule = new SimModule(simController);
+    const walletModule = new WalletModule(walletController);
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app
       .use(ROUTES.PLAY, playModule.router)
-      .post(ROUTES.SIM, simModule.router)
-      .post("/wallet/deposit", async (req, res, next) => {
-        try {
-          const response = await axios.post(
-            `${walletServiceUrl}/wallet/deposit`,
-            req.body
-          );
-
-          res.sendStatus(response.status);
-        } catch (error) {
-          next(error);
-        }
-      })
-      .post("/wallet/withdraw", async (req, res, next) => {
-        try {
-          const response = await axios.post(
-            `${walletServiceUrl}/wallet/withdraw`,
-            req.body
-          );
-
-          res.sendStatus(response.status);
-        } catch (error) {
-          next(error);
-        }
-      })
-      .get("/wallet/balance", async (_req, res, next) => {
-        try {
-          const response = await axios.get<{ currentBalance: number }>(
-            `${walletServiceUrl}/wallet/balance`
-          );
-
-          res
-            .status(response.status)
-            .json({ currentBalance: response.data.currentBalance });
-        } catch (error) {
-          next(error);
-        }
-      })
+      .use(ROUTES.SIM, simModule.router)
+      .use(ROUTES.WALLET.ROOT, walletModule.router)
       .get("/rtp", async (_req, res, next) => {
         try {
           const response = await axios.get<{ rtp: number }>(

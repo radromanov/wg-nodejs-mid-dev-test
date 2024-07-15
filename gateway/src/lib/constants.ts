@@ -5,8 +5,9 @@ export const ROUTES = {
   SIM: "/sim",
   RTP: "/rtp",
   WALLET: {
-    DEPOSIT: "/wallet/deposit",
-    WITHDRAW: "/wallet/withdraw",
-    BALANCE: "/wallet/balance",
+    ROOT: "/wallet",
+    DEPOSIT: "/deposit",
+    WITHDRAW: "/withdraw",
+    BALANCE: "/balance",
   },
-};
+} as const;
