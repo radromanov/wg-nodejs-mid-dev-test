@@ -1,11 +1,11 @@
 import { Express, json, urlencoded } from "express";
-import axios from "axios";
 import { Config } from "./Config";
 import { globalError, ROUTES } from "../lib";
 import { PlayController, PlayModule } from "@api/game/play";
-import { gameApi, walletApi } from "@lib/axios";
+import { gameApi, rtpApi, walletApi } from "@lib/axios";
 import { SimModule, SimController } from "@api/game/sim";
 import { WalletController, WalletModule } from "@api/wallet";
+import { RtpController, RtpModule } from "@api/rtp";
 
 export class Application {
   constructor(private readonly app: Express, private readonly config: Config) {}
@@ -17,41 +17,23 @@ export class Application {
 
   endpoints() {
     this.setup();
-    const { rtpServiceUrl } = this.config.get();
 
     const playController = new PlayController(gameApi);
     const simController = new SimController(gameApi);
     const walletController = new WalletController(walletApi);
+    const rtpController = new RtpController(rtpApi);
 
     const playModule = new PlayModule(playController);
     const simModule = new SimModule(simController);
     const walletModule = new WalletModule(walletController);
+    const rtpModule = new RtpModule(rtpController);
 
     this.app.get("/", (_req, res) => res.json({ health: "ok" }));
     this.app
       .use(ROUTES.PLAY, playModule.router)
       .use(ROUTES.SIM, simModule.router)
       .use(ROUTES.WALLET.ROOT, walletModule.router)
-      .get("/rtp", async (_req, res, next) => {
-        try {
-          const response = await axios.get<{ rtp: number }>(
-            `${rtpServiceUrl}/rtp`
-          );
-
-          res.status(response.status).json({ rtp: response.data.rtp });
-        } catch (error) {
-          next(error);
-        }
-      })
-      .post("/rtp", async (req, res, next) => {
-        try {
-          const response = await axios.post(`${rtpServiceUrl}/rtp`, req.body);
-
-          res.sendStatus(response.status);
-        } catch (error) {
-          next(error);
-        }
-      });
+      .use(ROUTES.RTP, rtpModule.router);
 
     this.app.use(globalError);
 

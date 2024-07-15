@@ -1,6 +1,7 @@
 import { ROUTES } from "@lib/constants";
 import { Router } from "express";
 import { WalletController } from "./wallet.controller";
+import { catcher } from "@lib/middlewares";
 
 export class WalletModule {
   private _router: Router;
@@ -12,15 +13,15 @@ export class WalletModule {
   get router() {
     this._router.post(
       ROUTES.WALLET.DEPOSIT,
-      this.walletController.handleDeposit
+      catcher(this.walletController.handleDeposit)
     );
     this._router.post(
       ROUTES.WALLET.WITHDRAW,
-      this.walletController.handleWithdraw
+      catcher(this.walletController.handleWithdraw)
     );
     this._router.get(
       ROUTES.WALLET.BALANCE,
-      this.walletController.handleBalance
+      catcher(this.walletController.handleBalance)
     );
 
     return this._router;
