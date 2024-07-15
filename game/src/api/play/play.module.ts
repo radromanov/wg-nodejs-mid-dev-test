@@ -13,17 +13,13 @@ export class PlayModule {
   }
 
   get router() {
-    this._router.post(
-      "/",
-      validate(PlayInput),
-      catcher(this.controller.handlePlay)
-    );
-
-    this._router.options("/", handleOptions(["POST", "OPTIONS"]));
-    this._router.get("/", handleNotImplemented);
-    this._router.put("/", handleNotImplemented);
-    this._router.patch("/", handleNotImplemented);
-    this._router.delete("/", handleNotImplemented);
+    this._router
+      .post("/", validate(PlayInput), catcher(this.controller.handlePlay))
+      .options("/", handleOptions(["POST", "OPTIONS"]))
+      .get("/", handleNotImplemented)
+      .put("/", handleNotImplemented)
+      .patch("/", handleNotImplemented)
+      .delete("/", handleNotImplemented);
 
     return this._router;
   }

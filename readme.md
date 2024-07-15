@@ -1,10 +1,10 @@
 # Slot Machine Game Microservices
 
-This project is part of a practical test, and has been built with the intent of satisfying the requirements highlighted in the `requirements.md` file. Said requirements _do not_ specify the need to split the code into microservices, however, I've taken it upon myself to attempt to simulate real-world projects (while staying simplistic and minimalistic, as I do not employ features such as message brokers, databases, authentication, caching, and etc.).
+This project is part of a practical test, and has been built with the intent of satisfying the requirements highlighted in the `requirements.md` file. Said requirements _do not_ specify the need to split the code into microservices, however, I've taken it upon myself to attempt to simulate real-world projects (while staying simplistic and minimalistic), as I do not employ features such as message brokers, databases, authentication, caching, and etc.
 
-I am aware that improvements can be made to both structure and implementation (communication via HTTP which is currently synchronous is one example), although I would like for this project to serve as a preview to what I can accomplish given my current situation, as well as deadlines (despite those same deadlines being more than friendly).
+I am aware that improvements can be made to both structure and implementation (communication via HTTP which is currently synchronous is one example, duplicate code across microservices such as `AppError`, etc.), although I would like for this project to serve as a preview to what I can accomplish given my current situation, as well as deadlines (despite those same deadlines being more than friendly).
 
-For the purpose of ease of installation and usage, I have included the `.env` files within the Git Repository, however, in a real-world example, those would have been kept secret.
+For the purpose of ease of installation and usage, I have included the `.env` files within the Git Repository, however, in a real-world example, those would have been kept secret and recorded within `.gitignore`.
 
 I would be more than happy to receive feedback on the back of this project, as well as areas I can look to improve in or simply research.
 
@@ -15,7 +15,6 @@ I would be more than happy to receive feedback on the back of this project, as w
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Access the APIs](#access-the-apis)
     - [Testing the Routes](#testing-the-routes)
       - [Example using curl](#example-using-curl)
   - [Available Routes](#available-routes)
@@ -28,6 +27,8 @@ Make sure you have the following installed on your system:
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/)
+
+You can also run the project locally by using the `<rootDir>/package.json` `dev` script, however, you would need to either have [pnpm](https://pnpm.io/installation) installed on your system, or, you would have to alter the `dev` script to use your preferred package manager (such as `npm`, `yarn`, `bun`, etc.).
 
 ## Installation
 
@@ -55,20 +56,19 @@ This will build and start the following services:
 
 ## Usage
 
-Once the services are up and running, you can access the APIs via the exposed ports.
-
-### Access the APIs
-
-The below are all available, however, the intent is for all HTTP calls to route through `http://localhost:3000`, so make requests to the gateway.
-
-- **Gateway service**: `http://localhost:3000`
-- **Game service**: `http://localhost:3001`
-- **Wallet service**: `http://localhost:3002`
-- **RTP service**: `http://localhost:3003`
-
 ### Testing the Routes
 
-You can use tools like `curl`, `Postman`, or any HTTP client to test the available routes. Bear in mind, if using `Postman`, you might have to substitute "localhost" for "127.0.0.1" in the url.
+You can use tools like `curl`, `Postman`, or any HTTP client to test the available routes. Bear in mind, if using `Postman`, you might have to substitute "localhost" for "127.0.0.1" in the url. Feel free to test each service as follows:
+
+```bash
+cd game && npm test   # Using npm
+cd game && pnpm test  # Using pnpm
+cd game && yarn test  # Using yarn
+```
+
+The above is an example on testing the `game/` microservice, but the process is the same for all other directories.
+
+`gateway/` has no tests as it only re-routes requests.
 
 #### Example using curl
 

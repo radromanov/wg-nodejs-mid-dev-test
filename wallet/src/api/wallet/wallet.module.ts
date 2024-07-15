@@ -40,7 +40,7 @@ export class WalletModule {
       .delete(ROUTES.WITHDRAW, handleNotImplemented);
 
     this._router
-      .get(ROUTES.BALANCE, this.controller.handleGetCurrentBalance)
+      .get(ROUTES.BALANCE, catcher(this.controller.handleGetCurrentBalance))
       .options(ROUTES.BALANCE, handleOptions(["GET", "OPTIONS"]))
       .post(ROUTES.BALANCE, handleNotImplemented)
       .put(ROUTES.BALANCE, handleNotImplemented)

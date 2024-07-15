@@ -20,9 +20,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      random-js:
-        specifier: ^2.1.0
-        version: 2.1.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1390,9 +1387,6 @@ packages:
   qs@6.12.2:
     resolution: {integrity: sha512-x+NLUpx9SYrcwXtX7ob1gnkSems4i/mGZX5SlYxwIau6RrUSODO89TR/XDGGpn5RPWSYIB+aSfuSlV5+CmbTBg==}
     engines: {node: '>=0.6'}
-
-  random-js@2.1.0:
-    resolution: {integrity: sha512-CRUyWmnzmZBA7RZSVGq0xMqmgCyPPxbiKNLFA5ud7KenojVX2s7Gv+V7eB52beKTPGxWRnVZ7D/tCIgYJJ8vNQ==}
 
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
@@ -3352,8 +3346,6 @@ snapshots:
   qs@6.12.2:
     dependencies:
       side-channel: 1.0.6
-
-  random-js@2.1.0: {}
 
   range-parser@1.2.1: {}
 
