@@ -26,7 +26,7 @@
 
 #### 1. RNG Integration:
 
-- Integrate an existing Random Number Generator (RNG) library for random selection. (`Random JS` or JavaScript Native `Math.random()`)
+- Integrate an existing Random Number Generator (RNG) library for random selection. (`lodash`)
 
 #### 2. Slot Game Logic:
 
